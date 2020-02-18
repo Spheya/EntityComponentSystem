@@ -160,9 +160,9 @@ namespace ecs {
 		_components.deleteComponent<Last>(entity);
 	}
 
-	inline void Engine::updateSystems(float) {
+	inline void Engine::updateSystems(float deltatime) {
 		for (auto& system : _systems)
-			system.first->update();
+			system.first->update(deltatime);
 	}
 
 	inline void Engine::systemCheckEntity(Entity& entity) {

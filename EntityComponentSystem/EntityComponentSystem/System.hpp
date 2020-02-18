@@ -18,7 +18,7 @@ namespace ecs {
 		virtual void addEntity(Entity& entity) = 0;
 		virtual void removeEntity(Entity& entity) = 0;
 
-		virtual void update() = 0;
+		virtual void update(float deltatime) = 0;
 	};
 
 	template<typename ... Components>
