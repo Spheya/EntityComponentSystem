@@ -90,7 +90,7 @@ namespace ecs {
 
 	template<typename Component>
 	inline void Engine::addComponent(Entity& entity, const Component& component) {
-		static const auto id = Component::GetId<Component>();
+		static const auto id = ecs::Component::getId<Component>();
 		_components.createComponent(entity, id, &component);
 
 		systemCheckEntity(entity);
@@ -166,8 +166,12 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
+		ChangeBuffer buffer;
+
 		for (auto& system : _systems)
-			system.first->update(deltatime);
+			system.first->update(deltatime, buffer);
+
+		// TODO : Process the changebuffer
 	}
 
 	inline void Engine::systemCheckEntity(Entity& entity) {

@@ -57,19 +57,19 @@ namespace ecs {
 
 template<typename T>
 inline bool ecs::Entity::hasComponent() const {
-	static const auto id = Component::GetId<T>();
+	static const auto id = Component::getId<T>();
 	return hasComponent(id);
 }
 
 template<typename T>
 inline T* ecs::Entity::getComponent() {
-	static const auto id = Component::GetId<T>();
+	static const auto id = Component::getId<T>();
 	return reinterpret_cast<T*>(id);
 }
 
 template<typename T>
 inline const T* ecs::Entity::getComponent() const {
-	static const auto id = Component::GetId<T>();
+	static const auto id = Component::getId<T>();
 	return reinterpret_cast<const T*>(getComponent(id));
 }
 

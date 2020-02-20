@@ -32,21 +32,28 @@ namespace ecs {
 		};
 
 	public:
-		size_t createEntity();
+		struct EntityPrefab {
+			friend class ChangeBuffer;
+		private:
+			EntityPrefab(size_t id) : id(id) {}
+			size_t id;
+		};
+
+		EntityPrefab createEntity();
 
 		template<typename Component, typename ... Args>
-		void addComponent(Entity& entity, Args&&... component);
+		void addComponent(Entity::Handle entity, Args&&... component);
 		template<typename Component, typename ... Args>
-		void addComponent(size_t entity, Args&&... component);
+		void addComponent(EntityPrefab entity, Args&&... component);
 
 		template<typename Component>
-		void removeComponent(Entity& entity);
+		void removeComponent(Entity::Handle entity);
 
 	private:
 		size_t _entitiesToBeCreated;
 		std::vector<std::vector<std::pair<Component::Id, std::unique_ptr<IComponentPrefab>>>> _newEntityComponentAddBuffer;
-		std::unordered_map<Entity*, std::vector<std::pair<Component::Id, std::unique_ptr<IComponentPrefab>>>> _componentAddBuffer;
-		std::unordered_map<Entity*, std::vector<Component::Id>> _componentRemovalBuffer;
+		std::unordered_map<Entity::Handle, std::vector<std::pair<Component::Id, std::unique_ptr<IComponentPrefab>>>> _componentAddBuffer;
+		std::unordered_map<Entity::Handle, std::vector<Component::Id>> _componentRemovalBuffer;
 	};
 
 	template<typename T>
@@ -59,41 +66,35 @@ namespace ecs {
 		return _ptr.get();
 	}
 
-	inline size_t ChangeBuffer::createEntity() {
+	inline ChangeBuffer::EntityPrefab ChangeBuffer::createEntity() {
 		_newEntityComponentAddBuffer.emplace_back();
-		return _entitiesToBeCreated++;
+		return EntityPrefab(_entitiesToBeCreated++);
 	}
 
 	template<typename Component, typename ...Args>
-	inline void ChangeBuffer::addComponent(Entity& entity, Args&& ... args) {
-		auto it = _componentAddBuffer.find(&entity);
+	inline void ChangeBuffer::addComponent(Entity::Handle entity, Args&& ... args) {
+		auto it = _componentAddBuffer.find(entity);
 		if (it == _componentAddBuffer.end()) {
-			_componentAddBuffer.emplace(std::make_pair(entity, std::vector<Component::Id, ComponentPrefab>()));
-			it = _componentAddBuffer.find(&entity);
+			_componentAddBuffer.emplace(std::make_pair(entity, std::vector<std::pair<ecs::Component::Id, std::unique_ptr<IComponentPrefab>>>()));
+			it = _componentAddBuffer.find(entity);
 		}
 
-		it->second.emplace_back(args...);
+		it->second.push_back(std::make_pair(ecs::Component::getId<Component>(), Component(Args...)));
 	}
 	template<typename Component, typename ...Args>
-	inline void ChangeBuffer::addComponent(size_t entity, Args&& ...component) {
-		assert(_entitiesToBeCreated > entity);
+	inline void ChangeBuffer::addComponent(ChangeBuffer::EntityPrefab entity, Args&& ...component) {
+		assert(_entitiesToBeCreated > entity.id);
 
-		auto it = _newEntityComponentAddBuffer.find(entity);
-		if (it == _newEntityComponentAddBuffer.end()) {
-			_newEntityComponentAddBuffer.emplace(std::make_pair(entity, std::vector<Component::Id, ComponentPrefab>()));
-			it = _newEntityComponentAddBuffer.find(entity);
-		}
-
-		it->second.emplace_back(args...);
+		_newEntityComponentAddBuffer[entity.id].push_back(std::make_pair(ecs::Component::getId<Component>(), Component(Args...)));
 	}
 	template<typename Component>
-	inline void ChangeBuffer::removeComponent(Entity& entity) {
-		auto it = _componentRemovalBuffer.find(&entity);
+	inline void ChangeBuffer::removeComponent(Entity::Handle entity) {
+		auto it = _componentRemovalBuffer.find(entity);
 		if (it == _componentRemovalBuffer.end()) {
-			_componentRemovalBuffer.emplace(std::make_pair(entity, std::vector<Component::Id, ComponentPrefab>()));
-			it = _componentRemovalBuffer.find(&entity);
+			_componentRemovalBuffer.emplace(std::make_pair(entity, std::vector<ecs::Component::Id>()));
+			it = _componentRemovalBuffer.find(entity);
 		}
 
-		it->second.push_back(ecs::Component::GetId<Component>());
+		it->second.push_back(ecs::Component::getId<Component>());
 	}
 }

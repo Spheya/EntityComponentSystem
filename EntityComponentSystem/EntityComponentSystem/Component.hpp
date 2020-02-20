@@ -19,8 +19,8 @@ namespace ecs {
 		}
 
 		template<typename T>
-		static Id GetId() {
-			const static Component::Id id = _GetId();
+		static Id getId() {
+			const static Component::Id id = _getId();
 			static bool allocatorBuilt = false;
 			if (!allocatorBuilt) {
 				buildAllocatorPrototype<T>();
@@ -33,7 +33,7 @@ namespace ecs {
 	private:
 		static std::vector<std::unique_ptr<IMemoryPoolAllocator>> ALLOCATORS;
 
-		static Id _GetId() {
+		static Id _getId() {
 			static Id id = 0;
 			return id++;
 		}

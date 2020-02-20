@@ -36,7 +36,7 @@ namespace ecs {
 	inline void ComponentStorage::createComponent(Entity& entity, const T& component) {
 		const auto allocator = getAllocator<T>();
 		const auto comp = allocator->allocate(component);
-		static const auto id = Component::GetId<T>();
+		static const auto id = Component::getId<T>();
 		entity.addComponent(comp, id);
 	}
 
@@ -44,19 +44,19 @@ namespace ecs {
 	inline void ComponentStorage::createComponent(Entity& entity, T&& component) {
 		const auto allocator = getAllocator<T>();
 		const auto comp = allocator->allocate(std::move(component));
-		static const auto id = Component::GetId<T>();
+		static const auto id = Component::getId<T>();
 		entity.addComponent(comp, id);
 	}
 
 	template<typename T>
 	inline void ComponentStorage::deleteComponent(Entity& entity) {
-		static const auto id = Component::GetId<T>();
+		static const auto id = Component::getId<T>();
 		entity.removeComponent(id);
 	}
 
 	template<typename T>
 	inline MemoryPoolAllocator<T>* ComponentStorage::getAllocator() {
-		static const auto id = Component::GetId<T>();
+		static const auto id = Component::getId<T>();
 		return reinterpret_cast<MemoryPoolAllocator<T>*>(getAllocator(id));
 	}
 

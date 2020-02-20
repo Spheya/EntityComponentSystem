@@ -5,6 +5,8 @@
 #include <algorithm>
 
 #include "Entity.hpp"
+#include "EntityGroup.hpp"
+#include "ChangeBuffer.hpp"
 
 #ifndef ECS_KEY_SIZE
 #define ECS_KEY_SIZE 256
@@ -25,19 +27,26 @@ namespace ecs {
 		virtual void addEntity(Entity& entity) = 0;
 		virtual void removeEntity(Entity& entity) = 0;
 
-		virtual void update(float deltatime) = 0;
+		virtual void update(float deltatime, ChangeBuffer& changeBuffer) = 0;
 	};
 
 	template<typename ... Components>
 	class System : public ISystem {
 	public:
-		struct EntityData {
+		class EntityData {
 			friend class System;
 		private:
-			EntityData(Entity::Handle handle) : handle(handle) {};
+			EntityData(Entity::Handle handle) : _handle(handle) {};
 
-			Entity::Handle handle;
-			std::tuple<Components*...> components;
+			Entity::Handle _handle;
+			std::tuple<Components*...> _components;
+
+		public:
+			template<typename T>
+			T* getComponent() { return std::get<T*>(_components); }
+			template<typename T>
+			const T* getComponent() const { return std::get<T*>(_components); }
+			Entity::Handle getHandle() const { return _handle; }
 		};
 
 		System();
@@ -47,8 +56,11 @@ namespace ecs {
 		void addEntity(Entity& entity) override;
 		void removeEntity(Entity& entity) override;
 
+		void update(float deltatime, ChangeBuffer& changeBuffer) override;
+
 		virtual void onAdd(Entity& entity);
 		virtual void onRemove(Entity& entity);
+		virtual void onUpdate(float deltatime, const EntityGroup<EntityData>& entityGroup, ChangeBuffer& changeBuffer) = 0;
 
 	protected:
 		const std::vector<EntityData>& getEntities() const;
@@ -77,7 +89,7 @@ namespace ecs {
 
 	template<typename ... Components>
 	inline bool System<Components...>::containsEntity(const Entity& entity) const {
-		return std::find_if(_entities.begin(), _entities.end(), [&](const EntityData& data) { return data.handle == entity.getHandle(); }) != _entities.end();
+		return std::find_if(_entities.begin(), _entities.end(), [&](const EntityData& data) { return data.getHandle() == entity.getHandle(); }) != _entities.end();
 	}
 
 	template<typename ... Components>
@@ -94,7 +106,7 @@ namespace ecs {
 		EntityData data(entity.getHandle());
 		putComponentsInEntityData<Components...>(entity, data);
 		_entities.insert(std::upper_bound(_entities.begin(), _entities.end(), data, [](const EntityData& data1, const EntityData& data2) {
-			return std::get<0>(data1.components) < std::get<0>(data2.components);
+			return std::get<0>(data1._components) < std::get<0>(data2._components);
 		}), data);
 		onAdd(entity);
 	}
@@ -103,9 +115,15 @@ namespace ecs {
 	inline void System<Components...>::removeEntity(Entity& entity) {
 		assert(containsEntity(entity));
 		_entities.erase(std::find_if(_entities.begin(), _entities.end(), [&](const EntityData& data) {
-			return data.handle == entity.getHandle();
+			return data.getHandle() == entity.getHandle();
 		}));
 		onRemove(entity);
+	}
+
+	template<typename ... Components>
+	inline void System<Components...>::update(float deltatime, ChangeBuffer& changeBuffer) {
+		// TODO: Something with multithreading
+		onUpdate(deltatime, EntityGroup<EntityData>(_entities.begin(), _entities.end()), changeBuffer);
 	}
 
 	template<typename ... Components>
@@ -122,7 +140,7 @@ namespace ecs {
 	template<typename ... Components>
 	template<typename First, typename Second, typename ... T>
 	inline void System<Components...>::buildKey() {
-		static Component::Id id = Component::GetId<First>();
+		static Component::Id id = Component::getId<First>();
 		_key.set(id, true);
 		buildKey<Second, T...>();
 	}
@@ -130,20 +148,20 @@ namespace ecs {
 	template<typename ... Components>
 	template<typename Last>
 	inline void System<Components...>::buildKey() {
-		static Component::Id id = Component::GetId<Last>();
+		static Component::Id id = Component::getId<Last>();
 		_key.set(id, true);
 	}
 
 	template<typename ... Components>
 	template<typename First, typename Second, typename ... T>
 	inline void System<Components...>::putComponentsInEntityData(Entity& entity, EntityData& data) {
-		std::get<First*>(data.components) = entity.getComponent<First>();
+		std::get<First*>(data._components) = entity.getComponent<First>();
 		putComponentsInEntityData<Second, T...>(entity, data);
 	}
 
 	template<typename ... Components>
 	template<typename Last>
 	inline void System<Components...>::putComponentsInEntityData(Entity& entity, EntityData& data) {
-		std::get<Last*>(data.components) = entity.getComponent<Last>();
+		std::get<Last*>(data._components) = entity.getComponent<Last>();
 	}
 }
