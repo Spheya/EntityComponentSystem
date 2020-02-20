@@ -7,6 +7,8 @@
 
 namespace ecs {
 	class ComponentStorage {
+		friend class Engine;
+
 	public:
 		template<typename T>
 		void createComponent(Entity& entity, const T& component);

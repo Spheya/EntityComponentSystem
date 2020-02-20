@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChangeBuffer.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="MemoryPoolAllocator.hpp" />

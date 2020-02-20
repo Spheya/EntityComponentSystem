@@ -12,7 +12,7 @@ struct VelocityComponent {
 };
 
 class PhysicsSystem : public ecs::System<PositionComponent, VelocityComponent> {
-	void update(float deltatime, /*ecs::SystemData& data, ecs::EcsChangeBuffer changeBuffer*/) override {
+	void update(float deltatime/*, ecs::SystemData& data, ecs::EcsChangeBuffer changeBuffer*/) override {
 		int i = 0;
 		for (auto entity : /*data.*/getEntities()) {
 			/*auto& position = std::get<PositionComponent>(entity.components);

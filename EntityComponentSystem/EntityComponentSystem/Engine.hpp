@@ -74,18 +74,23 @@ namespace ecs {
 		systemCheckEntity(*e);
 		return *e;
 	}
-
+	
 	inline void Engine::deleteEntity(Entity::Handle handle) {
 		assert(_entities.size() > handle);
 		assert(_entities[handle]);
+
+		Entity& entity = *_entities[handle];
+
+		while (entity._components.size())
+			_components.deleteComponent(entity, entity._components.begin()->first);
 
 		_entities[handle] = nullptr;
 		_freeEntitySpaces.push(handle);
 	}
 
-	template<typename T>
-	inline void Engine::addComponent(Entity& entity, const T& component) {
-		static const auto id = Component::GetId<T>();
+	template<typename Component>
+	inline void Engine::addComponent(Entity& entity, const Component& component) {
+		static const auto id = Component::GetId<Component>();
 		_components.createComponent(entity, id, &component);
 
 		systemCheckEntity(entity);
