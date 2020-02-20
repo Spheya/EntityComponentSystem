@@ -7,6 +7,8 @@
 
 namespace ecs {
 	class ChangeBuffer {
+		friend class Engine;
+
 		class IComponentPrefab {
 		public:
 			IComponentPrefab() = default;

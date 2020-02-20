@@ -171,7 +171,36 @@ namespace ecs {
 		for (auto& system : _systems)
 			system.first->update(deltatime, buffer);
 
-		// TODO : Process the changebuffer
+
+		// Create new entities and add components to them
+		for (int i = 0; i < buffer._entitiesToBeCreated; ++i) {
+			auto& entity = createEntity();
+
+			for (const auto& component : buffer._newEntityComponentAddBuffer[i])
+				_components.createComponent(entity, component.first, component.second.get());
+
+			systemCheckEntity(entity);
+		}
+
+		// Add components to existing entities
+		for (const auto& componentBatch : buffer._componentAddBuffer) {
+			Entity& entity = *_entities[componentBatch.first];
+
+			for (const auto& component : componentBatch.second)
+				_components.createComponent(entity, component.first, component.second->get());
+		
+			systemCheckEntity(entity);
+		}
+
+		// Remove components from existing entities
+		for (const auto& componentBatch : buffer._componentRemovalBuffer) {
+			Entity& entity = *_entities[componentBatch.first];
+
+			for (const auto component : componentBatch.second)
+				_components.deleteComponent(entity, component);
+			
+			systemCheckEntity(entity);
+		}
 	}
 
 	inline void Engine::systemCheckEntity(Entity& entity) {
