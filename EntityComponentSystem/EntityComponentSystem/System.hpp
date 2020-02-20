@@ -13,6 +13,13 @@
 namespace ecs {
 	class ISystem {
 	public:
+		ISystem() = default;
+		ISystem(ISystem&) = default;
+		ISystem& operator=(ISystem&) = default;
+		ISystem(ISystem&&) = default;
+		ISystem& operator=(ISystem&&) = default;
+		virtual ~ISystem() = default;
+
 		virtual bool containsEntity(const Entity& entity) const = 0;
 		virtual bool fitsEntity(const Entity& entity) const = 0;
 		virtual void addEntity(Entity& entity) = 0;
