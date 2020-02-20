@@ -64,7 +64,7 @@ inline bool ecs::Entity::hasComponent() const {
 template<typename T>
 inline T* ecs::Entity::getComponent() {
 	static const auto id = Component::getId<T>();
-	return reinterpret_cast<T*>(id);
+	return reinterpret_cast<T*>(getComponent(id));
 }
 
 template<typename T>

@@ -39,8 +39,9 @@ int main() {
 		ecsEngine.addComponents(entity, PositionComponent{ 0.0f, 0.0f }, VelocityComponent{ 1.0f, 1.0f });
 	}
 
-	for (int i = 0; i < 100000; ++i) {
+	for (int i = 0; i < 10000; ++i) {
 		ecsEngine.updateSystems(0.0f);
+		//std::cout << "update " << i << std::endl;
 	}
 
 	std::cout << "done!" << std::endl;
