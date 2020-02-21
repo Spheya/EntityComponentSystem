@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <mutex>
 
 #include "Entity.hpp"
 
@@ -59,6 +60,12 @@ namespace ecs {
 		void removeComponent(Entity::Handle entity);
 
 	private:
+
+		std::mutex _createEntityMutex;
+		std::mutex _addNewEntityComponentMutex;
+		std::mutex _addComponentMutex;
+		std::mutex _removeComponentMutex;
+
 		size_t _entitiesToBeCreated;
 		std::vector<std::vector<std::pair<Component::Id, IComponentPrefab*>>> _newEntityComponentAddBuffer;
 		std::unordered_map<Entity::Handle, std::vector<std::pair<Component::Id, IComponentPrefab*>>> _componentAddBuffer;
@@ -87,12 +94,16 @@ namespace ecs {
 	}
 
 	inline ChangeBuffer::EntityPrefab ChangeBuffer::createEntity() {
+		std::lock_guard<std::mutex> guard(_createEntityMutex);
+
 		_newEntityComponentAddBuffer.emplace_back();
 		return EntityPrefab(_entitiesToBeCreated++);
 	}
 
 	template<typename Component, typename ...Args>
 	inline void ChangeBuffer::addComponent(Entity::Handle entity, Args&& ... args) {
+		std::lock_guard<std::mutex> guard(_addNewEntityComponentMutex);
+
 		auto it = _componentAddBuffer.find(entity);
 		if (it == _componentAddBuffer.end()) {
 			_componentAddBuffer.emplace(std::make_pair(entity, std::vector<std::pair<ecs::Component::Id, IComponentPrefab*>>()));
@@ -103,12 +114,14 @@ namespace ecs {
 	}
 	template<typename Component, typename ...Args>
 	inline void ChangeBuffer::addComponent(ChangeBuffer::EntityPrefab entity, Args&& ... args) {
-		assert(_entitiesToBeCreated > entity.id);
+		std::lock_guard<std::mutex> guard(_addComponentMutex);
 
 		_newEntityComponentAddBuffer[entity.id].push_back(std::make_pair(ecs::Component::getId<Component>(), new ComponentPrefab<Component>(args...)));
 	}
 	template<typename Component>
 	inline void ChangeBuffer::removeComponent(Entity::Handle entity) {
+		std::lock_guard<std::mutex> guard(_removeComponentMutex);
+
 		auto it = _componentRemovalBuffer.find(entity);
 		if (it == _componentRemovalBuffer.end()) {
 			_componentRemovalBuffer.emplace(std::make_pair(entity, std::vector<ecs::Component::Id>()));

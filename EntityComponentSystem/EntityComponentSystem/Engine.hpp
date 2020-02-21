@@ -182,43 +182,41 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
-		std::vector<ChangeBuffer> buffers;
-		buffers.resize(std::thread::hardware_concurrency());
+		ChangeBuffer buffer;
 
 		for (auto& systemBatch : _systemBatches) {
-			systemBatch.update(deltatime, buffers);
+			systemBatch.update(deltatime, buffer);
 		}
 
-		for (auto& buffer : buffers) {
-			// Create new entities and add components to them
-			for (size_t i = 0; i < buffer._entitiesToBeCreated; ++i) {
-				auto& entity = createEntity();
 
-				for (const auto& component : buffer._newEntityComponentAddBuffer[i])
-					_components.createComponent(entity, component.first, component.second);
+		// Create new entities and add components to them
+		for (size_t i = 0; i < buffer._entitiesToBeCreated; ++i) {
+			auto& entity = createEntity();
 
-				systemCheckEntity(entity);
-			}
+			for (const auto& component : buffer._newEntityComponentAddBuffer[i])
+				_components.createComponent(entity, component.first, component.second);
 
-			// Add components to existing entities
-			for (const auto& componentBatch : buffer._componentAddBuffer) {
-				Entity& entity = *_entities[componentBatch.first];
+			systemCheckEntity(entity);
+		}
 
-				for (const auto& component : componentBatch.second)
-					_components.createComponent(entity, component.first, component.second->get());
+		// Add components to existing entities
+		for (const auto& componentBatch : buffer._componentAddBuffer) {
+			Entity& entity = *_entities[componentBatch.first];
 
-				systemCheckEntity(entity);
-			}
+			for (const auto& component : componentBatch.second)
+				_components.createComponent(entity, component.first, component.second->get());
 
-			// Remove components from existing entities
-			for (const auto& componentBatch : buffer._componentRemovalBuffer) {
-				Entity& entity = *_entities[componentBatch.first];
+			systemCheckEntity(entity);
+		}
 
-				for (const auto component : componentBatch.second)
-					_components.deleteComponent(entity, component);
+		// Remove components from existing entities
+		for (const auto& componentBatch : buffer._componentRemovalBuffer) {
+			Entity& entity = *_entities[componentBatch.first];
 
-				systemCheckEntity(entity);
-			}
+			for (const auto component : componentBatch.second)
+				_components.deleteComponent(entity, component);
+
+			systemCheckEntity(entity);
 		}
 	}
 

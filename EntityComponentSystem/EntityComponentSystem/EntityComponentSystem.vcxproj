@@ -22,6 +22,7 @@
     <ClInclude Include="ChangeBuffer.hpp" />
     <ClInclude Include="Component.hpp" />
     <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="JobQueue.hpp" />
     <ClInclude Include="MemoryPoolAllocator.hpp" />
     <ClInclude Include="ComponentStorage.hpp" />
     <ClInclude Include="Entity.hpp" />

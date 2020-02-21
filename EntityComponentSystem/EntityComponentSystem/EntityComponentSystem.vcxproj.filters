@@ -42,5 +42,8 @@
     <ClInclude Include="SystemBatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JobQueue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

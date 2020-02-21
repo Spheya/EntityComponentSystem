@@ -29,8 +29,9 @@ namespace ecs {
 		virtual void removeEntity(Entity& entity) = 0;
 		virtual const std::bitset<ECS_KEY_SIZE>& getKey() const = 0;
 		virtual bool isMultithreaded() const = 0;
+		virtual size_t getEntityCount() const = 0;
 
-		virtual void update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) = 0;
+		virtual void update(float deltatime, ChangeBuffer& changeBuffer, size_t startEntity, size_t nEntities) = 0;
 	};
 
 	template<typename ... Components>
@@ -60,8 +61,9 @@ namespace ecs {
 		void removeEntity(Entity& entity) override;
 		const std::bitset<ECS_KEY_SIZE>& getKey() const override;
 		bool isMultithreaded() const override;
+		size_t getEntityCount() const override;
 
-		void update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) override;
+		void update(float deltatime, ChangeBuffer& changeBuffer, size_t startEntity, size_t nEntities) override;
 
 		virtual void onAdd(Entity& entity);
 		virtual void onRemove(Entity& entity);
@@ -141,30 +143,15 @@ namespace ecs {
 	}
 
 	template<typename ... Components>
-	inline void System<Components...>::update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) {
-		const size_t entitiesPerThread = _entities.size() / nThreads;
-		size_t begin = 0;
-		size_t count = 0;
-		
-		for (size_t i = 0; i < nThreads - 1; ++i) {
-			begin += entitiesPerThread;
-			threads.emplace_back(
-				[=]() {
-					onUpdate(deltatime, 
-							 EntityGroup<EntityData>(_entities.begin() + begin, _entities.begin() + begin + entitiesPerThread), 
-							 *(changeBuffer + count));
-				}
-			);
-			++count;
-		}
+	inline size_t System<Components...>::getEntityCount() const {
+		return _entities.size();
+	}
 
-		threads.emplace_back(
-			[=]() {
-				onUpdate(deltatime,
-						 EntityGroup<EntityData>(_entities.begin() + begin, _entities.end()),
-						 *(changeBuffer + count));
-			}
-		);
+	template<typename ... Components>
+	inline void System<Components...>::update(float deltatime, ChangeBuffer& changeBuffer, size_t startEntity, size_t nEntities) {
+		EntityGroup<EntityData> group(_entities.begin() + startEntity, _entities.begin() + startEntity + nEntities);
+
+		onUpdate(deltatime, group, changeBuffer);
 	}
 
 	template<typename ... Components>

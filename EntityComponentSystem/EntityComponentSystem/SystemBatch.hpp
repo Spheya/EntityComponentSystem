@@ -3,9 +3,14 @@
 #include <thread>
 
 #include "System.hpp"
+#include "JobQueue.hpp"
 
 #ifndef ECS_KEY_SIZE
 #define ECS_KEY_SIZE 256
+#endif
+
+#ifndef ENTITIES_PER_THREAD
+#define ENTITIES_PER_THREAD 32
 #endif
 
 namespace ecs {
@@ -15,7 +20,7 @@ namespace ecs {
 		void removeSystem(ISystem* system);
 		bool containsSystem(ISystem* system);
 		bool fitsSystem(const ISystem* system) const;
-		void update(float deltatime, std::vector<ChangeBuffer>& changeBuffers);
+		void update(float deltatime, ChangeBuffer& changeBuffers);
 
 	private:
 		size_t _multiThreadedCount;
@@ -52,29 +57,34 @@ namespace ecs {
 		return temp.none();
 	}
 
-	inline void SystemBatch::update(float deltatime, std::vector<ChangeBuffer>& changeBuffers) {
-		size_t threadsPerSystem = (changeBuffers.size() - (_systems.size() - _multiThreadedCount)) / _multiThreadedCount;
-		size_t extraThreads = changeBuffers.size() % _systems.size();
-		size_t offset = 0;
+	inline void SystemBatch::update(float deltatime, ChangeBuffer& changeBuffer) {
+		JobQueue queue;
 
-		std::vector<std::thread> threadsVector;
-
-		// Launch threads
 		for (auto& system : _systems) {
 			if (system->isMultithreaded()) {
-				size_t threads = threadsPerSystem;
-				if (extraThreads) {
-					++threads;
-					--extraThreads;
+				// Add every complete group to the queue
+				for (size_t i = ENTITIES_PER_THREAD; i < system->getEntityCount(); i += ENTITIES_PER_THREAD) {
+					queue.addJob([&]() {
+									system->update(deltatime, changeBuffer, i - ENTITIES_PER_THREAD, ENTITIES_PER_THREAD);
+								 });
 				}
-				system->update(deltatime, changeBuffers.begin() + offset, threadsVector, threads);
+
+				// Add the last group of entities as a smaller group
+				size_t size = system->getEntityCount() % ENTITIES_PER_THREAD;
+				if (size != 0) {
+					size_t begin = system->getEntityCount() - size;
+					queue.addJob([&]() {
+									system->update(deltatime, changeBuffer, begin, size);
+								 });
+				}
 			} else {
-				system->update(deltatime, changeBuffers.begin() + offset, threadsVector, 1);
+				// Add the whole system as a single job when the system cannot be run on multiple threads
+				queue.addJob([&]() {
+								system->update(deltatime, changeBuffer, 0, system->getEntityCount());
+							 });
 			}
 		}
 
-		// Join all the threads
-		for (auto& thread : threadsVector)
-			thread.join();
+		queue.dispatch(std::thread::hardware_concurrency());
 	}
 }
