@@ -12,6 +12,9 @@ struct VelocityComponent {
 };
 
 class PhysicsSystem : public ecs::System<PositionComponent, VelocityComponent> {
+public:
+	PhysicsSystem() : Base(true) {}
+
 	void onUpdate(float, const ecs::EntityGroup<EntityData>& entities, ecs::ChangeBuffer& changeBuffer) override {
 		for (auto entity : entities) {
 			auto position = entity.getComponent<PositionComponent>();
@@ -30,18 +33,15 @@ class PhysicsSystem : public ecs::System<PositionComponent, VelocityComponent> {
 int main() {
 	ecs::Engine ecsEngine;
 
-	ecsEngine.registerSystem<PhysicsSystem>(std::make_unique<PhysicsSystem>()/*,
-											ecs::SystemSettings()
-											.parallelize()*/);
+	ecsEngine.registerSystem<PhysicsSystem>(std::make_unique<PhysicsSystem>());
 
 	for (int i = 0; i < 100; ++i) {
 		ecs::Entity& entity = ecsEngine.createEntity();
 		ecsEngine.addComponents(entity, PositionComponent{ 0.0f, 0.0f }, VelocityComponent{ 1.0f, 1.0f });
 	}
 
-	for (int i = 0; i < 10000; ++i) {
+	for (;;) {
 		ecsEngine.updateSystems(0.0f);
-		//std::cout << "update " << i << std::endl;
 	}
 
 	std::cout << "done!" << std::endl;

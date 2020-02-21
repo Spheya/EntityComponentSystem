@@ -3,6 +3,7 @@
 #include <tuple>
 #include <cassert>
 #include <algorithm>
+#include <thread>
 
 #include "Entity.hpp"
 #include "EntityGroup.hpp"
@@ -26,8 +27,10 @@ namespace ecs {
 		virtual bool fitsEntity(const Entity& entity) const = 0;
 		virtual void addEntity(Entity& entity) = 0;
 		virtual void removeEntity(Entity& entity) = 0;
+		virtual const std::bitset<ECS_KEY_SIZE>& getKey() const = 0;
+		virtual bool isMultithreaded() const = 0;
 
-		virtual void update(float deltatime, ChangeBuffer& changeBuffer) = 0;
+		virtual void update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) = 0;
 	};
 
 	template<typename ... Components>
@@ -49,25 +52,30 @@ namespace ecs {
 			Entity::Handle getHandle() const { return _handle; }
 		};
 
-		System();
+		explicit System(bool multithreaded);
 
 		bool containsEntity(const Entity& entity) const override;
 		bool fitsEntity(const Entity& entity) const override;
 		void addEntity(Entity& entity) override;
 		void removeEntity(Entity& entity) override;
+		const std::bitset<ECS_KEY_SIZE>& getKey() const override;
+		bool isMultithreaded() const override;
 
-		void update(float deltatime, ChangeBuffer& changeBuffer) override;
+		void update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) override;
 
 		virtual void onAdd(Entity& entity);
 		virtual void onRemove(Entity& entity);
 		virtual void onUpdate(float deltatime, const EntityGroup<EntityData>& entityGroup, ChangeBuffer& changeBuffer) = 0;
 
 	protected:
+		using Base = System<Components...>;
+
 		const std::vector<EntityData>& getEntities() const;
 
 	private:
 		std::bitset<ECS_KEY_SIZE> _key;
 		std::vector<EntityData> _entities;
+		bool _multithreaded;
 
 		template<typename First, typename Second, typename ... T>
 		void buildKey();
@@ -83,7 +91,9 @@ namespace ecs {
 	};
 
 	template<typename ... Components>
-	inline System<Components...>::System() {
+	inline System<Components...>::System(bool multithreaded) :
+		_multithreaded(multithreaded)
+	{
 		buildKey<Components...>();
 	}
 
@@ -120,10 +130,41 @@ namespace ecs {
 		onRemove(entity);
 	}
 
+	template<typename ...Components>
+	inline const std::bitset<ECS_KEY_SIZE>& System<Components...>::getKey() const {
+		return _key;
+	}
+
+	template<typename ...Components>
+	inline bool System<Components...>::isMultithreaded() const {
+		return _multithreaded;
+	}
+
 	template<typename ... Components>
-	inline void System<Components...>::update(float deltatime, ChangeBuffer& changeBuffer) {
-		// TODO: Something with multithreading
-		onUpdate(deltatime, EntityGroup<EntityData>(_entities.begin(), _entities.end()), changeBuffer);
+	inline void System<Components...>::update(float deltatime, std::vector<ChangeBuffer>::iterator changeBuffer, std::vector<std::thread>& threads, size_t nThreads) {
+		const size_t entitiesPerThread = _entities.size() / nThreads;
+		size_t begin = 0;
+		size_t count = 0;
+		
+		for (size_t i = 0; i < nThreads - 1; ++i) {
+			begin += entitiesPerThread;
+			threads.emplace_back(
+				[=]() {
+					onUpdate(deltatime, 
+							 EntityGroup<EntityData>(_entities.begin() + begin, _entities.begin() + begin + entitiesPerThread), 
+							 *(changeBuffer + count));
+				}
+			);
+			++count;
+		}
+
+		threads.emplace_back(
+			[=]() {
+				onUpdate(deltatime,
+						 EntityGroup<EntityData>(_entities.begin() + begin, _entities.end()),
+						 *(changeBuffer + count));
+			}
+		);
 	}
 
 	template<typename ... Components>

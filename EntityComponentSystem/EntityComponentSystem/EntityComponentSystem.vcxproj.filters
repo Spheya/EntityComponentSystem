@@ -39,5 +39,8 @@
     <ClInclude Include="EntityGroup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SystemBatch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

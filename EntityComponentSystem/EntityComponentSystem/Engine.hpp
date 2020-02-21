@@ -2,6 +2,7 @@
 
 #include "System.hpp"
 #include "ComponentStorage.hpp"
+#include "SystemBatch.hpp"
 
 #include <queue>
 
@@ -41,6 +42,7 @@ namespace ecs {
 		std::queue<Entity::Handle> _freeEntitySpaces;
 
 		std::vector<std::pair<std::unique_ptr<ISystem>, std::type_index>> _systems;
+		std::vector<SystemBatch> _systemBatches;
 
 		ComponentStorage _components;
 
@@ -121,16 +123,30 @@ namespace ecs {
 	inline void Engine::registerSystem(std::unique_ptr<T> system) {
 		assert(!containsSystem<T>());
 		_systems.push_back(std::make_pair<std::unique_ptr<ISystem>, std::type_index>(std::move(system), std::type_index(typeid(T))));
+		
+		for (auto& batch : _systemBatches) {
+			if (batch.fitsSystem(system.get())) {
+				batch.addSystem(system.get());
+				return;
+			}
+		}
 	}
 
 	template<typename T, typename>
 	inline void Engine::unregisterSystem() {
 		assert(containsSystem<T>());
-		_systems.erase(std::find_if(_systems.begin(), _systems.end(),
+		auto system = std::find_if(_systems.begin(), _systems.end(),
 			[&](const std::pair<std::unique_ptr<ISystem>, std::type_index>& other) { 
 				other.second == std::type_index(typeid(T)); 
 			}
-		));
+		);
+
+		for (auto& batch : _systemBatches) {
+			if (batch.containsSystem(system->get()))
+				batch.removeSystem(system->get());
+		}
+
+		_systems.erase(system);
 	}
 
 	template<typename T>
@@ -166,40 +182,43 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
-		ChangeBuffer buffer;
+		std::vector<ChangeBuffer> buffers;
+		buffers.resize(std::thread::hardware_concurrency());
 
-		for (auto& system : _systems)
-			system.first->update(deltatime, buffer);
-
-
-		// Create new entities and add components to them
-		for (int i = 0; i < buffer._entitiesToBeCreated; ++i) {
-			auto& entity = createEntity();
-
-			for (const auto& component : buffer._newEntityComponentAddBuffer[i])
-				_components.createComponent(entity, component.first, component.second.get());
-
-			systemCheckEntity(entity);
+		for (auto& systemBatch : _systemBatches) {
+			systemBatch.update(deltatime, buffers);
 		}
 
-		// Add components to existing entities
-		for (const auto& componentBatch : buffer._componentAddBuffer) {
-			Entity& entity = *_entities[componentBatch.first];
+		for (auto& buffer : buffers) {
+			// Create new entities and add components to them
+			for (size_t i = 0; i < buffer._entitiesToBeCreated; ++i) {
+				auto& entity = createEntity();
 
-			for (const auto& component : componentBatch.second)
-				_components.createComponent(entity, component.first, component.second->get());
-		
-			systemCheckEntity(entity);
-		}
+				for (const auto& component : buffer._newEntityComponentAddBuffer[i])
+					_components.createComponent(entity, component.first, component.second);
 
-		// Remove components from existing entities
-		for (const auto& componentBatch : buffer._componentRemovalBuffer) {
-			Entity& entity = *_entities[componentBatch.first];
+				systemCheckEntity(entity);
+			}
 
-			for (const auto component : componentBatch.second)
-				_components.deleteComponent(entity, component);
-			
-			systemCheckEntity(entity);
+			// Add components to existing entities
+			for (const auto& componentBatch : buffer._componentAddBuffer) {
+				Entity& entity = *_entities[componentBatch.first];
+
+				for (const auto& component : componentBatch.second)
+					_components.createComponent(entity, component.first, component.second->get());
+
+				systemCheckEntity(entity);
+			}
+
+			// Remove components from existing entities
+			for (const auto& componentBatch : buffer._componentRemovalBuffer) {
+				Entity& entity = *_entities[componentBatch.first];
+
+				for (const auto component : componentBatch.second)
+					_components.deleteComponent(entity, component);
+
+				systemCheckEntity(entity);
+			}
 		}
 	}
 
