@@ -20,7 +20,7 @@ namespace ecs {
 		void removeSystem(ISystem* system);
 		bool containsSystem(ISystem* system);
 		bool fitsSystem(const ISystem* system) const;
-		void update(float deltatime, ChangeBuffer& changeBuffers);
+		void update(float deltatime, ChangeBuffer& changeBuffers, size_t nThreads);
 
 	private:
 		size_t _multiThreadedCount;
@@ -57,14 +57,14 @@ namespace ecs {
 		return temp.none();
 	}
 
-	inline void SystemBatch::update(float deltatime, ChangeBuffer& changeBuffer) {
+	inline void SystemBatch::update(float deltatime, ChangeBuffer& changeBuffer, size_t nThreads) {
 		JobQueue queue;
 
 		for (auto& system : _systems) {
 			if (system->isMultithreaded()) {
 				// Add every complete group to the queue
 				for (size_t i = ENTITIES_PER_THREAD; i < system->getEntityCount(); i += ENTITIES_PER_THREAD) {
-					queue.addJob([&]() {
+					queue.addJob([&,i]() {
 									system->update(deltatime, changeBuffer, i - ENTITIES_PER_THREAD, ENTITIES_PER_THREAD);
 								 });
 				}
@@ -85,6 +85,6 @@ namespace ecs {
 			}
 		}
 
-		queue.dispatch(std::thread::hardware_concurrency());
+		queue.dispatch(nThreads);
 	}
 }

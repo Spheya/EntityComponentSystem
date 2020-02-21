@@ -1,4 +1,7 @@
 
+
+#define ENTITIES_PER_THREAD 1000
+
 #include <iostream>
 
 #include <Engine.hpp>
@@ -35,14 +38,15 @@ int main() {
 
 	ecsEngine.registerSystem<PhysicsSystem>(std::make_unique<PhysicsSystem>());
 
-	for (int i = 0; i < 100; ++i) {
+	for (int i = 0; i < 1000; ++i) {
 		ecs::Entity& entity = ecsEngine.createEntity();
 		ecsEngine.addComponents(entity, PositionComponent{ 0.0f, 0.0f }, VelocityComponent{ 1.0f, 1.0f });
 	}
 
-	for (;;) {
-		ecsEngine.updateSystems(0.0f);
-	}
+	for (int i = 0; i < 10000; ++i)
+		ecsEngine.updateSystems(0.0f, 2);
 
 	std::cout << "done!" << std::endl;
+	int pause;
+	std::cin >> pause;
 }

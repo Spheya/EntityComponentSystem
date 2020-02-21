@@ -36,6 +36,7 @@ namespace ecs {
 		bool containsSystem() const;
 
 		void updateSystems(float deltatime);
+		void updateSystems(float deltatime, size_t nThreads);
 
 	private:
 		std::vector<std::unique_ptr<Entity>> _entities;
@@ -125,11 +126,13 @@ namespace ecs {
 		_systems.push_back(std::make_pair<std::unique_ptr<ISystem>, std::type_index>(std::move(system), std::type_index(typeid(T))));
 		
 		for (auto& batch : _systemBatches) {
-			if (batch.fitsSystem(system.get())) {
-				batch.addSystem(system.get());
+			if (batch.fitsSystem(_systems.back().first.get())) {
+				batch.addSystem(_systems.back().first.get());
 				return;
 			}
 		}
+		_systemBatches.emplace_back();
+		_systemBatches.back().addSystem(_systems.back().first.get());
 	}
 
 	template<typename T, typename>
@@ -182,10 +185,14 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
+		updateSystems(deltatime, std::thread::hardware_concurrency());
+	}
+
+	inline void Engine::updateSystems(float deltatime, size_t nThreads) {
 		ChangeBuffer buffer;
 
 		for (auto& systemBatch : _systemBatches) {
-			systemBatch.update(deltatime, buffer);
+			systemBatch.update(deltatime, buffer, nThreads);
 		}
 
 

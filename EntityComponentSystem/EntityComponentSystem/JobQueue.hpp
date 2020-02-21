@@ -34,6 +34,7 @@ namespace ecs {
 							return;
 
 						job = _jobs.front();
+						_jobs.pop();
 					}
 
 					job();
