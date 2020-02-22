@@ -15,34 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component.hpp">
+    <ClInclude Include="ECS\ChangeBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentStorage.hpp">
+    <ClInclude Include="ECS\Component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.hpp">
+    <ClInclude Include="ECS\ComponentStorage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="System.hpp">
+    <ClInclude Include="ECS\Engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPoolAllocator.hpp">
+    <ClInclude Include="ECS\Entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.hpp">
+    <ClInclude Include="ECS\EntityGroup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChangeBuffer.hpp">
+    <ClInclude Include="ECS\JobQueue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EntityGroup.hpp">
+    <ClInclude Include="ECS\MemoryPoolAllocator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SystemBatch.hpp">
+    <ClInclude Include="ECS\System.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JobQueue.hpp">
+    <ClInclude Include="ECS\SystemBatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

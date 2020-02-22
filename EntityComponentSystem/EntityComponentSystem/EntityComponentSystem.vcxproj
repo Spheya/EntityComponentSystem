@@ -19,16 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChangeBuffer.hpp" />
-    <ClInclude Include="Component.hpp" />
-    <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="JobQueue.hpp" />
-    <ClInclude Include="MemoryPoolAllocator.hpp" />
-    <ClInclude Include="ComponentStorage.hpp" />
-    <ClInclude Include="Entity.hpp" />
-    <ClInclude Include="System.hpp" />
-    <ClInclude Include="EntityGroup.hpp" />
-    <ClInclude Include="SystemBatch.hpp" />
+    <ClInclude Include="ECS\ChangeBuffer.hpp" />
+    <ClInclude Include="ECS\Component.hpp" />
+    <ClInclude Include="ECS\ComponentStorage.hpp" />
+    <ClInclude Include="ECS\Engine.hpp" />
+    <ClInclude Include="ECS\Entity.hpp" />
+    <ClInclude Include="ECS\EntityGroup.hpp" />
+    <ClInclude Include="ECS\JobQueue.hpp" />
+    <ClInclude Include="ECS\MemoryPoolAllocator.hpp" />
+    <ClInclude Include="ECS\System.hpp" />
+    <ClInclude Include="ECS\SystemBatch.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
