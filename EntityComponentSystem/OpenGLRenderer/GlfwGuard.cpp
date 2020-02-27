@@ -1,4 +1,4 @@
-#include "GlfwGuard.h"
+#include "GlfwGuard.hpp"
 
 #include <GLFW/glfw3.h>
 #include <exception>

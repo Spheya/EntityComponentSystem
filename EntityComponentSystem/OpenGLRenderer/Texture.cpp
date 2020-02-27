@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Texture.hpp"
 #include <cassert>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,41 +10,41 @@ renderer::Texture::Texture(const std::string& fileName) {
 }
 
 renderer::Texture::Texture(Texture&& other) noexcept {
-	m_textureId = other.m_textureId;
-	m_type = other.m_type;
-	m_width = other.m_width;
-	m_height = other.m_height;
-	m_channels = other.m_channels;
-	other.m_textureId = 0;
+	_textureId = other._textureId;
+	_type = other._type;
+	_width = other._width;
+	_height = other._height;
+	_channels = other._channels;
+	other._textureId = 0;
 }
 
 renderer::Texture& renderer::Texture::operator=(Texture&& other) noexcept {
-	m_textureId = other.m_textureId;
-	m_type = other.m_type;
-	m_width = other.m_width;
-	m_height = other.m_height;
-	m_channels = other.m_channels;
-	other.m_textureId = 0;
+	_textureId = other._textureId;
+	_type = other._type;
+	_width = other._width;
+	_height = other._height;
+	_channels = other._channels;
+	other._textureId = 0;
 
 	return *this;
 }
 
 renderer::Texture::~Texture() {
 	if (isValid())
-		glDeleteTextures(1, &m_textureId);
+		glDeleteTextures(1, &_textureId);
 }
 
 void renderer::Texture::loadFromFile(const std::string& fileName) {
-	unsigned char* data = stbi_load(fileName.c_str(), &m_width, &m_height, &m_channels, 0);
+	unsigned char* data = stbi_load(fileName.c_str(), &_width, &_height, &_channels, 0);
 
-	loadFromMemory(data, m_channels, m_width, m_height);
+	loadFromMemory(data, _channels, _width, _height);
 
 	stbi_image_free(data);
 }
 
 void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height) {
-	if (m_textureId == 0)
-		glGenTextures(1, &m_textureId);
+	if (_textureId == 0)
+		glGenTextures(1, &_textureId);
 
 	// Use tightly packed data
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -60,7 +60,7 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 	}
 
 
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -73,15 +73,15 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 		data
 	);
 
-	m_type = GL_TEXTURE_2D;
+	_type = GL_TEXTURE_2D;
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
 void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth) {
-	if (m_textureId == 0)
-		glGenTextures(1, &m_textureId);
+	if (_textureId == 0)
+		glGenTextures(1, &_textureId);
 
 	// Use tightly packed data
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -97,7 +97,7 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 	}
 
 
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
 	glTexImage3D(
 		GL_TEXTURE_3D,
 		0,
@@ -111,7 +111,7 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 		data
 	);
 
-	m_type = GL_TEXTURE_3D;
+	_type = GL_TEXTURE_3D;
 
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -124,29 +124,29 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 void renderer::Texture::bind(unsigned slot) const {
 	assert(isValid());
 	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(m_type, m_textureId);
+	glBindTexture(_type, _textureId);
 }
 
 void renderer::Texture::unbind(unsigned slot) const {
 	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(m_type, 0);
+	glBindTexture(_type, 0);
 }
 
 unsigned renderer::Texture::getWidth() const {
 	assert(isValid());
-	return m_width;
+	return _width;
 }
 
 unsigned renderer::Texture::getHeight() const {
 	assert(isValid());
-	return m_height;
+	return _height;
 }
 
 GLenum renderer::Texture::getType() const {
 	assert(isValid());
-	return m_type;
+	return _type;
 }
 
 bool renderer::Texture::isValid() const {
-	return m_textureId != 0;
+	return _textureId != 0;
 }

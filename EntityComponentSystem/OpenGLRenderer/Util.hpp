@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <Object.h>
-#include "Vbo.h"
+#include "Vbo.hpp"
 
 namespace renderer::Util {
 	

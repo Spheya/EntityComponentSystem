@@ -1,10 +1,10 @@
 #pragma once
 #include <memory>
 
-#include "Model.h"
-#include "TexturePack.h"
-#include "ShaderProgram.h"
-#include "UniformPack.h"
+#include "Model.hpp"
+#include "TexturePack.hpp"
+#include "ShaderProgram.hpp"
+#include "UniformPack.hpp"
 
 namespace renderer {
 	struct RenderComponent {

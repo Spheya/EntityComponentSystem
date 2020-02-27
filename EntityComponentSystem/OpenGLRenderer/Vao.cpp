@@ -1,35 +1,35 @@
-#include "Vao.h"
+#include "Vao.hpp"
 renderer::Vao::Vao() {
-	glGenVertexArrays(1, &m_id);
+	glGenVertexArrays(1, &_id);
 }
 
 renderer::Vao::Vao(Vao&& other) noexcept :
-	m_id(other.m_id),
-	m_vbos(std::move(other.m_vbos))
+	_id(other._id),
+	_vbos(std::move(other._vbos))
 {
-	other.m_id = 0;
+	other._id = 0;
 }
 
 renderer::Vao& renderer::Vao::operator=(Vao&& other) noexcept {
-	m_id = other.m_id;
-	m_vbos = std::move(other.m_vbos);
+	_id = other._id;
+	_vbos = std::move(other._vbos);
 
-	other.m_id = 0;
+	other._id = 0;
 
 	return *this;
 }
 
 renderer::Vao::~Vao() {
-	if(m_id != 0)
-		glDeleteVertexArrays(1, &m_id);
+	if(_id != 0)
+		glDeleteVertexArrays(1, &_id);
 }
 
 bool renderer::Vao::isValid() const {
-	return m_id == 0;
+	return _id == 0;
 }
 
 void renderer::Vao::bind() const {
-	glBindVertexArray(m_id);
+	glBindVertexArray(_id);
 }
 
 void renderer::Vao::unbind() {
@@ -37,14 +37,14 @@ void renderer::Vao::unbind() {
 }
 
 void renderer::Vao::prepareDraw() const {
-	glBindVertexArray(m_id);
+	glBindVertexArray(_id);
 
-	for(const GLuint attrib : m_attributes)
+	for(const GLuint attrib : _attributes)
 		glEnableVertexAttribArray(attrib);
 }
 
 void renderer::Vao::finishDraw() const {
-	for (const GLuint attrib : m_attributes)
+	for (const GLuint attrib : _attributes)
 		glDisableVertexAttribArray(attrib);
 
 	glBindVertexArray(0);

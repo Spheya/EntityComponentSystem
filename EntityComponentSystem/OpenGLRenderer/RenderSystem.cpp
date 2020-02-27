@@ -1,4 +1,4 @@
-#include "RenderSystem.h"
+#include "RenderSystem.hpp"
 
 void  renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>& entities, ecs::ChangeBuffer&) {
 	for(const auto& entity : entities) {
@@ -21,18 +21,18 @@ void  renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>
 void renderer::RenderSystem::callGlEnableAndDisable(const ShaderProgram& shader) {
 	// Apply glEnable
 	for(GLenum enable : shader.getEnables()) {
-		const auto it = m_enabled.find(enable);
-		if (it == m_enabled.end() || !it->second) {
-			m_enabled[enable] = true;
+		const auto it = _enabled.find(enable);
+		if (it == _enabled.end() || !it->second) {
+			_enabled[enable] = true;
 			glEnable(enable);
 		}
 	}
 
 	// Apply glDisable
 	for(GLenum disable : shader.getDisables()) {
-		const auto it = m_enabled.find(disable);
-		if (it == m_enabled.end() || it->second) {
-			m_enabled[disable] = false;
+		const auto it = _enabled.find(disable);
+		if (it == _enabled.end() || it->second) {
+			_enabled[disable] = false;
 			glDisable(disable);
 		}
 	}

@@ -1,9 +1,9 @@
-#include "UniformPack.h"
+#include "UniformPack.hpp"
 
 bool renderer::UniformPack::remove(GLint id) {
-	for(auto it = m_uniforms.begin(); it != m_uniforms.end(); ++it) {
+	for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it) {
 		if(it->position == id) {
-			m_uniforms.erase(it);
+			_uniforms.erase(it);
 			return true;
 		}
 	}
@@ -11,7 +11,7 @@ bool renderer::UniformPack::remove(GLint id) {
 }
 
 bool renderer::UniformPack::contains(GLint id) const {
-	for (auto it = m_uniforms.begin(); it != m_uniforms.end(); ++it)
+	for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 		if (it->position == id)
 			return true;
 	return false;
@@ -19,7 +19,7 @@ bool renderer::UniformPack::contains(GLint id) const {
 
 void renderer::UniformPack::set(GLint id, const void* data, UniformType type, GLsizei count) {
 	// Override uniform if it exists
-	for (auto it = m_uniforms.begin(); it != m_uniforms.end(); ++it) {
+	for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it) {
 		if(it->position == id) {
 			it->data = data;
 			it->type = type;
@@ -29,11 +29,11 @@ void renderer::UniformPack::set(GLint id, const void* data, UniformType type, GL
 	}
 
 	// Create a new uniform
-	m_uniforms.emplace_back(id, data, type, count);
+	_uniforms.emplace_back(id, data, type, count);
 }
 
 void renderer::UniformPack::apply() const {
-	for(auto& uniform : m_uniforms) {
+	for(auto& uniform : _uniforms) {
 		switch (uniform.type) {
 		case UniformType::_1F: 
 			glUniform1fv(uniform.position, uniform.count, reinterpret_cast<const GLfloat*>(uniform.data));

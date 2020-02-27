@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <GL/glew.h>
 
-#include "Shader.h"
+#include "Shader.hpp"
 #include <memory>
 #include <functional>
 
@@ -45,15 +45,15 @@ namespace renderer {
 		[[nodiscard]] const std::vector<GLenum>& getDisables() const;
 
 	private:
-		GLuint m_program = 0;
+		GLuint _program = 0;
 
-		std::unique_ptr<std::function<void()>> m_preparationFunction;
-		std::unique_ptr<std::function<void()>> m_cleanupFunction;
+		std::unique_ptr<std::function<void()>> _preparationFunction;
+		std::unique_ptr<std::function<void()>> _cleanupFunction;
 
-		std::vector<GLenum> m_disable;
-		std::vector<GLenum> m_enable;
+		std::vector<GLenum> _disable;
+		std::vector<GLenum> _enable;
 
 		// This data isn't being used, but owning the shaders makes sure they are kept alive
-		std::vector<std::shared_ptr<Shader>> m_shaders;
+		std::vector<std::shared_ptr<Shader>> _shaders;
 	};
 }

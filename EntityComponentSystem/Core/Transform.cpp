@@ -1,75 +1,75 @@
-#include "Transform.h"
+#include "Transform.hpp"
 
 Transform::Transform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
-	m_position(position),
-	m_rotation(rotation),
-	m_scale(scale) {
+	_position(position),
+	_rotation(rotation),
+	_scale(scale) {
 	build();
 }
 
 void Transform::move(const glm::vec3& delta) {
-	m_position += delta;
+	_position += delta;
 	build();
 }
 
 void Transform::setPosition(const glm::vec3& position) {
-	m_position = position;
+	_position = position;
 	build();
 }
 
 const glm::vec3& Transform::getPosition() const {
-	return m_position;
+	return _position;
 }
 
 void Transform::rotate(const glm::vec3& delta) {
-	m_rotation += delta;
+	_rotation += delta;
 	build();
 }
 
 void Transform::setRotation(const glm::vec3& rotation) {
-	m_rotation = rotation;
+	_rotation = rotation;
 	build();
 }
 
 const glm::vec3& Transform::getRotation() const {
-	return m_rotation;
+	return _rotation;
 }
 
 void Transform::setScale(const glm::vec3& scale) {
-	m_scale = scale;
+	_scale = scale;
 	build();
 }
 
 const glm::vec3& Transform::getScale() const {
-	return m_scale;
+	return _scale;
 }
 
 const glm::mat4& Transform::getMatrix() const {
-	return m_transformation;
+	return _transformation;
 }
 
 const glm::mat4& Transform::getInverseMatrix() const {
-	return m_inverseTransformation;
+	return _inverseTransformation;
 }
 
 const glm::mat4& Transform::getNormalMatrix() const {
-	return m_normalTransformation;
+	return _normalTransformation;
 }
 
 void Transform::build() {
 
-	const float cosX = cos(m_rotation.x);
-	const float sinX = sin(m_rotation.x);
-	const float cosY = cos(m_rotation.y);
-	const float sinY = sin(m_rotation.y);
-	const float cosZ = cos(m_rotation.z);
-	const float sinZ = sin(m_rotation.z);
+	const float cosX = cos(_rotation.x);
+	const float sinX = sin(_rotation.x);
+	const float cosY = cos(_rotation.y);
+	const float sinY = sin(_rotation.y);
+	const float cosZ = cos(_rotation.z);
+	const float sinZ = sin(_rotation.z);
 
 	const glm::mat4 scalePos = glm::mat4(
-		m_scale.x, 0.0f, 0.0f, 0.0f,
-		0.0f, m_scale.y, 0.0f, 0.0f,
-		0.0f, 0.0f, m_scale.z, 0.0f,
-		m_position.x, m_position.y, m_position.z, 1.0f
+		_scale.x, 0.0f, 0.0f, 0.0f,
+		0.0f, _scale.y, 0.0f, 0.0f,
+		0.0f, 0.0f, _scale.z, 0.0f,
+		_position.x, _position.y, _position.z, 1.0f
 	);
 	const glm::mat4 rotX = glm::mat4(
 		1.0f, 0.0f, 0.0f, 0.0f,
@@ -90,6 +90,6 @@ void Transform::build() {
 		0.0f, 0.0f, 0.0f, 1.0f
 	);
 
-	m_transformation = scalePos * rotY * rotX * rotZ;
-	m_inverseTransformation = glm::inverse(m_transformation);
+	_transformation = scalePos * rotY * rotX * rotZ;
+	_inverseTransformation = glm::inverse(_transformation);
 }

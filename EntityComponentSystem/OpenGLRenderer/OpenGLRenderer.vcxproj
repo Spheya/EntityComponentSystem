@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlfwGuard.cpp" />
-    <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
@@ -34,23 +33,21 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="GlewGuard.h" />
-    <ClInclude Include="GlfwGuard.h" />
-    <ClInclude Include="GLWindow.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="RenderComponent.h" />
-    <ClInclude Include="RenderSystem.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TexturePack.h" />
-    <ClInclude Include="UniformPack.h" />
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="Vao.h" />
-    <ClInclude Include="Vbo.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="GlfwGuard.hpp" />
+    <ClInclude Include="Input.hpp" />
+    <ClInclude Include="Model.hpp" />
+    <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="RenderSystem.hpp" />
+    <ClInclude Include="Shader.hpp" />
+    <ClInclude Include="ShaderProgram.hpp" />
+    <ClInclude Include="Texture.hpp" />
+    <ClInclude Include="TexturePack.hpp" />
+    <ClInclude Include="UniformPack.hpp" />
+    <ClInclude Include="Util.hpp" />
+    <ClInclude Include="Vao.hpp" />
+    <ClInclude Include="Vbo.hpp" />
+    <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -1,6 +1,6 @@
 #pragma once
-#include "Transform.h"
-#include "Window.h"
+#include "Transform.hpp"
+#include "Window.hpp"
 
 namespace renderer {
 	class Camera
@@ -24,9 +24,9 @@ namespace renderer {
 		void setFov(float fov);
 
 	private:
-		Transform m_transform;
+		Transform _transform;
 
-		float m_near, m_far, m_fov;
+		float _near, _far, _fov;
 
 	};
 }

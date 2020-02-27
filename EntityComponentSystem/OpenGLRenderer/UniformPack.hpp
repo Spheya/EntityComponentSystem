@@ -34,6 +34,6 @@ namespace renderer {
 			GLsizei count;
 		};
 
-		std::vector<Uniform> m_uniforms;
+		std::vector<Uniform> _uniforms;
 	};
 }

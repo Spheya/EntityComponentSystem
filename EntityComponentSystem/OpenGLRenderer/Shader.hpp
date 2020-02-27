@@ -22,7 +22,7 @@ namespace renderer {
 		[[nodiscard]] GLuint getId() const;
 
 	private:
-		GLenum m_type = 0;
-		GLuint m_id = 0;
+		GLenum _type = 0;
+		GLuint _id = 0;
 	};
 }

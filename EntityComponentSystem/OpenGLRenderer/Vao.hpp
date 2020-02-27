@@ -1,6 +1,6 @@
 #pragma once
 #include <GL/glew.h>
-#include "Vbo.h"
+#include "Vbo.hpp"
 
 namespace renderer {
 	class Vao
@@ -28,26 +28,26 @@ namespace renderer {
 		void finishDraw() const;
 
 	private:
-		GLuint m_id;
+		GLuint _id;
 
-		std::vector<GLuint> m_attributes;
-		std::vector<IVbo*> m_vbos;
+		std::vector<GLuint> _attributes;
+		std::vector<IVbo*> _vbos;
 	};
 
 	template <typename ... T>
 	size_t Vao::createVbo(const std::vector<GLuint>& indices, GLenum usage) {
-		m_attributes.reserve(m_attributes.size() + indices.size());
+		_attributes.reserve(_attributes.size() + indices.size());
 		for (GLuint i : indices) {
-			assert(std::find(m_attributes.begin(), m_attributes.end(), i) == m_attributes.end());
-			m_attributes.push_back(i);
+			assert(std::find(_attributes.begin(), _attributes.end(), i) == _attributes.end());
+			_attributes.push_back(i);
 		}
 
-		m_vbos.push_back(new Vbo<T...>(indices, usage));
-		return m_vbos.size() - 1;
+		_vbos.push_back(new Vbo<T...>(indices, usage));
+		return _vbos.size() - 1;
 	}
 
 	template <typename ... T>
 	Vbo<T...>& Vao::getVbo(size_t id) {
-		return *reinterpret_cast<Vbo<T...>*>(m_vbos[id]);
+		return *reinterpret_cast<Vbo<T...>*>(_vbos[id]);
 	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Texture.h"
+#include "Texture.hpp"
 #include <memory>
 
 namespace renderer {
@@ -15,7 +15,7 @@ namespace renderer {
 		void unbind() const;
 
 	private:
-		std::vector<std::shared_ptr<const Texture>> m_textures;
+		std::vector<std::shared_ptr<const Texture>> _textures;
 
 	};
 }

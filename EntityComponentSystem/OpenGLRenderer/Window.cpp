@@ -1,34 +1,34 @@
-#include "Window.h"
+#include "Window.hpp"
 
 #include <iostream>
 #include <GL/glew.h>
 
 renderer::Window::Window(const char* title, Mode windowMode, GLFWmonitor* monitor) :
-	m_title(title),
-	m_input(std::make_shared<Input>(nullptr))
+	_title(title),
+	_input(std::make_shared<Input>(nullptr))
 {
 	setMode(windowMode, monitor);
 }
 
 void renderer::Window::destroy() {
-	glfwDestroyWindow(m_window);
+	glfwDestroyWindow(_window);
 }
 
 bool renderer::Window::isCloseRequested() const {
-	return glfwWindowShouldClose(m_window);
+	return glfwWindowShouldClose(_window);
 }
 
 void renderer::Window::update() {
-	glfwSwapBuffers(m_window);
+	glfwSwapBuffers(_window);
 	glfwPollEvents();
 
 	// Calculate the deltatime
 	const float time = float(glfwGetTime());
-	m_deltaTime = time - m_time;
-	m_time = time;
+	_deltaTime = time - _time;
+	_time = time;
 
 	// Prepare input for the next frame
-	m_input->update(m_deltaTime);
+	_input->update(_deltaTime);
 }
 
 void renderer::Window::clear(bool colour, bool depth, bool stencil) {
@@ -36,42 +36,42 @@ void renderer::Window::clear(bool colour, bool depth, bool stencil) {
 }
 
 void renderer::Window::makeCurrentContext() {
-	glfwMakeContextCurrent(m_window);
+	glfwMakeContextCurrent(_window);
 	glfwSwapInterval(1);
 
-	if(!m_glewSetup) {
+	if(!_glewSetup) {
 		const GLenum glewError = glewInit();
 		if (glewError != GLEW_OK) {
 			std::cout << "Something went wrong when setting up GLEW! Error code - " << glewError << std::endl;
 			std::terminate();
 		}
-		m_glewSetup = true;
+		_glewSetup = true;
 	}
 }
 
 void renderer::Window::setTitle(const char* title) {
-	m_title = title;
-	glfwSetWindowTitle(m_window, title);
+	_title = title;
+	glfwSetWindowTitle(_window, title);
 }
 
 int renderer::Window::getWindowWidth() const {
-	return m_width;
+	return _width;
 }
 
 int renderer::Window::getWindowHeight() const {
-	return m_height;
+	return _height;
 }
 
 glm::vec2 renderer::Window::getWindowSize() const {
-	return glm::vec2(m_width, m_height);
+	return glm::vec2(_width, _height);
 }
 
 float renderer::Window::getDeltaTime() const {
-	return m_deltaTime;
+	return _deltaTime;
 }
 
 float renderer::Window::getTime() const {
-	return m_time;
+	return _time;
 }
 
 void renderer::Window::setMode(Mode windowMode, GLFWmonitor* monitor) {
@@ -81,56 +81,56 @@ void renderer::Window::setMode(Mode windowMode, GLFWmonitor* monitor) {
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
 	if (windowMode == Mode::WINDOWED) {
-		m_width = 640;
-		m_height = 480;
+		_width = 640;
+		_height = 480;
 	}
 	else {
-		m_width = mode->width;
-		m_height = mode->height;
+		_width = mode->width;
+		_height = mode->height;
 	}
 
-	if (m_window)
-		glfwDestroyWindow(m_window);
+	if (_window)
+		glfwDestroyWindow(_window);
 
 	switch (windowMode) {
 	case Mode::WINDOWED:
-		setWindow(createWindowedWindow(m_title, m_width, m_height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate));
+		setWindow(createWindowedWindow(_title, _width, _height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate));
 		break;
 	case Mode::BORDERLESS:
-		setWindow(createBorderlessWindow(m_title, m_width, m_height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate));
+		setWindow(createBorderlessWindow(_title, _width, _height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate));
 		break;
 	case Mode::FULLSCREEN:
-		setWindow(createFullscreenWindow(m_title, m_width, m_height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate, monitor));
+		setWindow(createFullscreenWindow(_title, _width, _height, mode->redBits, mode->greenBits, mode->blueBits, mode->refreshRate, monitor));
 		break;
 	}
 
 	// Center the window
 	int originX, originY;
 	glfwGetMonitorPos(monitor, &originX, &originY);
-	glfwSetWindowPos(m_window, originX + (mode->width - m_width) / 2, originY + (mode->height - m_height) / 2);
+	glfwSetWindowPos(_window, originX + (mode->width - _width) / 2, originY + (mode->height - _height) / 2);
 }
 
 glm::mat3 renderer::Window::getOrthographicProjectionMatrix() const {
 	return glm::mat3(
-		2.0f / m_width, 0.0f, 0.0f,
-		0.0f, 2.0f / m_height, 0.0f,
+		2.0f / _width, 0.0f, 0.0f,
+		0.0f, 2.0f / _height, 0.0f,
 		0.0f, 0.0f, 0.999f
 	);
 }
 
 const renderer::Input* renderer::Window::getInput() const {
-	return m_input.get();
+	return _input.get();
 }
 
 const std::shared_ptr<renderer::Input>& renderer::Window::getInput() {
-	return m_input;
+	return _input;
 }
 
 void renderer::Window::setWindow(GLFWwindow* window) {
-	m_window = window;
-	m_input->setParent(window);
+	_window = window;
+	_input->setParent(window);
 
-	if (!m_window) {
+	if (!_window) {
 		// Something really went wrong when setting up the window
 		glfwTerminate();
 		std::terminate();

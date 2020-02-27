@@ -31,11 +31,11 @@ namespace renderer {
 		[[nodiscard]] bool isValid() const;
 
 	private:
-		GLuint m_textureId = 0;
-		GLenum m_type;
+		GLuint _textureId = 0;
+		GLenum _type;
 
-		int m_width;
-		int m_height;
-		int m_channels;
+		int _width;
+		int _height;
+		int _channels;
 	};
 }

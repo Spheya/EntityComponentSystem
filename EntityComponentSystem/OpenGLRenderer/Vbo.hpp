@@ -20,7 +20,7 @@ namespace renderer {
 		VboElementData(std::initializer_list<T> init) {
 			assert(init.size() == Size);
 			for (int i = 0; i < Size; ++i)
-				m_data[i] = *(init.begin() + i);
+				_data[i] = *(init.begin() + i);
 		}
 
 		T& operator[](size_t index);
@@ -29,19 +29,19 @@ namespace renderer {
 		constexpr static GLenum getType();
 
 	private:
-		T m_data[Size];
+		T _data[Size];
 	};
 
 	template <typename T, size_t Size>
 	T& VboElementData<T, Size>::operator[](size_t index) {
 		assert(index < Size);
-		return m_data[index];
+		return _data[index];
 	}
 
 	template <typename T, size_t Size>
 	const T& VboElementData<T, Size>::operator[](size_t index) const {
 		assert(index < Size);
-		return m_data[index];
+		return _data[index];
 	}
 
 	template <typename T, size_t Size>
@@ -114,33 +114,33 @@ namespace renderer {
 		IVbo();
 
 	private:
-		GLuint m_id;
+		GLuint _id;
 	};
 
 	inline IVbo::IVbo(IVbo&& other) noexcept :
-		m_id(other.m_id)
+		_id(other._id)
 	{
-		other.m_id = 0;
+		other._id = 0;
 	}
 
 	inline IVbo& IVbo::operator=(IVbo&& other) noexcept {
-		m_id = other.m_id;
-		other.m_id = 0;
+		_id = other._id;
+		other._id = 0;
 
 		return* this;
 	}
 
 	inline IVbo::~IVbo() {
 		if(isValid())
-			glDeleteBuffers(1, &m_id);
+			glDeleteBuffers(1, &_id);
 	}
 
 	inline bool IVbo::isValid() const {
-		return m_id != 0;
+		return _id != 0;
 	}
 
 	inline void IVbo::bind() const {
-		glBindBuffer(GL_ARRAY_BUFFER, m_id);
+		glBindBuffer(GL_ARRAY_BUFFER, _id);
 	}
 
 	inline void IVbo::unbind() const {
@@ -148,7 +148,7 @@ namespace renderer {
 	}
 
 	inline IVbo::IVbo() {
-		glGenBuffers(1, &m_id);
+		glGenBuffers(1, &_id);
 	}
 
 
@@ -167,14 +167,14 @@ namespace renderer {
 		template<GLuint Index, typename Last>
 		void bindIndices(const std::vector<GLuint>& indices);
 
-		std::vector<std::tuple<T...>> m_data;
-		size_t m_allocated = 0;
-		GLenum m_usage;
+		std::vector<std::tuple<T...>> _data;
+		size_t _allocated = 0;
+		GLenum _usage;
 	};
 
 	template <typename ... T>
 	Vbo<T...>::Vbo(const std::vector<GLuint>& indices, GLenum usage) :
-		m_usage(usage)
+		_usage(usage)
 	{
 		assert(indices.size() == sizeof...(T));
 
@@ -185,13 +185,13 @@ namespace renderer {
 
 	template <typename ... T>
 	void Vbo<T...>::store(std::vector<std::tuple<T...>> data) {
-		if(data.size() > m_allocated) {
-			m_allocated = data.size();
-			m_data = std::move(data);
-			glBufferData(GL_ARRAY_BUFFER, m_allocated * (sizeof(T) + ... + 0), &m_data[0], m_usage);
+		if(data.size() > _allocated) {
+			_allocated = data.size();
+			_data = std::move(data);
+			glBufferData(GL_ARRAY_BUFFER, _allocated * (sizeof(T) + ... + 0), &_data[0], _usage);
 		}else {
-			m_data = std::move(data);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, m_allocated * (sizeof(T) + ... + 0), &m_data[0]);
+			_data = std::move(data);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, _allocated * (sizeof(T) + ... + 0), &_data[0]);
 		}
 	}
 

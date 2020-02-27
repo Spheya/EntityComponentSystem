@@ -57,13 +57,13 @@ namespace renderer {
 
 		static std::unordered_map<GLFWwindow*, BufferData> buffer;
 
-		std::unordered_map<unsigned int, bool> m_lastframeKeys;
+		std::unordered_map<unsigned int, bool> _lastframeKeys;
 
-		std::unordered_map<unsigned int, bool> m_lastframeMouseButtons;
-		MouseData m_mouseData;
-		bool m_isMouseLocked = false;
+		std::unordered_map<unsigned int, bool> _lastframeMouseButtons;
+		MouseData _mouseData;
+		bool _isMouseLocked = false;
 
-		GLFWwindow* m_parent;
+		GLFWwindow* _parent;
 
 		void update(float deltatime);
 	};

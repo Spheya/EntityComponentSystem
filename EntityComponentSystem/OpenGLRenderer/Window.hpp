@@ -55,16 +55,16 @@ namespace renderer {
 		static GLFWwindow* createWindowedWindow(const char* title, int width, int height, int redBits, int greenBits, int blueBits, int refreshRate);
 		static GLFWwindow* createFullscreenWindow(const char* title, int width, int height, int redBits, int greenBits, int blueBits, int refreshRate, GLFWmonitor* monitor);
 
-		bool m_glewSetup = false;
+		bool _glewSetup = false;
 
-		float m_deltaTime = 0.0f;
-		float m_time = 0.0f;
+		float _deltaTime = 0.0f;
+		float _time = 0.0f;
 
-		GLFWwindow* m_window = nullptr;
+		GLFWwindow* _window = nullptr;
 
-		int m_width = 0, m_height = 0;
-		const char* m_title;
+		int _width = 0, _height = 0;
+		const char* _title;
 
-		std::shared_ptr<Input> m_input;
+		std::shared_ptr<Input> _input;
 	};
 }

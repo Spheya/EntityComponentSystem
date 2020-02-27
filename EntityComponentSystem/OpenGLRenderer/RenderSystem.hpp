@@ -1,8 +1,8 @@
 #pragma once
 #include <ECS/System.hpp>
 
-#include "RenderComponent.h"
-#include "Transform.h"
+#include "RenderComponent.hpp"
+#include "Transform.hpp"
 
 namespace renderer {
 
@@ -14,7 +14,7 @@ namespace renderer {
 	private:
 		void callGlEnableAndDisable(const ShaderProgram& shader);
 
-		std::unordered_map <GLenum, bool> m_enabled;
+		std::unordered_map <GLenum, bool> _enabled;
 	};
 
 }
