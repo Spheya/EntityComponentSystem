@@ -1,2 +1,2 @@
-# EntityComponentSystem
-A simple ECS in C++
+# Slamanander Engine
+Cool stuff 😎
