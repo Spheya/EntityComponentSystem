@@ -89,7 +89,7 @@ inline bool ecs::Entity::hasComponent(Component::Id id) const {
 	return _key[id];
 }
 
-void* ecs::Entity::getComponent(Component::Id id) {
+inline void* ecs::Entity::getComponent(Component::Id id) {
 	assert(hasComponent(id));
 	return _components.find(id)->second;
 }

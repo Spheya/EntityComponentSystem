@@ -44,5 +44,5 @@ namespace ecs {
 		}
 	};
 
-	std::vector<std::unique_ptr<IMemoryPoolAllocator>> Component::ALLOCATORS;
+	inline std::vector<std::unique_ptr<IMemoryPoolAllocator>> Component::ALLOCATORS;
 }

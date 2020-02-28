@@ -7,7 +7,9 @@
 namespace renderer {
 
 	class RenderSystem : public ecs::System<RenderComponent> {
-	protected:
+	public:
+		RenderSystem() : Base(false) {}
+
 		void onUpdate(float deltatime, const ecs::EntityGroup<EntityData>& entities, ecs::ChangeBuffer&) override;
 		//TODO : Store everything in a custom data structure to prepare for instanced rendering
 
