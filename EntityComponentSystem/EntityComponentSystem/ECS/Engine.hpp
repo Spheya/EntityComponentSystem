@@ -17,6 +17,9 @@ namespace ecs {
 		template<typename Component>
 		void addComponent(Entity& entity, const Component& component);
 
+		template<typename Component>
+		void addComponent(Entity& entity, Component&& component);
+
 		template<typename ... Components>
 		void addComponents(Entity& entity, const Components& ... components);
 
@@ -93,8 +96,14 @@ namespace ecs {
 
 	template<typename Component>
 	inline void Engine::addComponent(Entity& entity, const Component& component) {
-		static const auto id = ecs::Component::getId<Component>();
-		_components.createComponent(entity, id, &component);
+		_components.createComponent(entity, &component);
+
+		systemCheckEntity(entity);
+	}
+
+	template<typename Component>
+	inline void Engine::addComponent(Entity& entity, Component&& component) {
+		_components.createComponent(entity, std::move(component));
 
 		systemCheckEntity(entity);
 	}
