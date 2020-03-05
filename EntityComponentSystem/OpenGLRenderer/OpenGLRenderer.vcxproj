@@ -23,6 +23,7 @@
     <ClCompile Include="GlfwGuard.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -36,6 +37,8 @@
     <ClInclude Include="GlfwGuard.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="DrawComponent.hpp" />
+    <ClInclude Include="RenderSystem.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />
     <ClInclude Include="Texture.hpp" />
