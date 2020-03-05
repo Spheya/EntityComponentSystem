@@ -35,11 +35,11 @@ namespace renderer {
 		void addCleanupFunction(std::unique_ptr<std::function<void()>> cleanup);
 		void removeCleanupFunction();
 
-		void addGlEnable(GLenum value);
-		void removeGlEnable(GLenum value);
+		void addEnable(GLenum value);
+		void removeEnable(GLenum value);
 
-		void addGlDisable(GLenum value);
-		void removeGlDisable(GLenum value);
+		void addDisable(GLenum value);
+		void removeDisable(GLenum value);
 
 		[[nodiscard]] const std::vector<GLenum>& getEnables() const;
 		[[nodiscard]] const std::vector<GLenum>& getDisables() const;

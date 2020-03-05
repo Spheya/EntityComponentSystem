@@ -1,6 +1,9 @@
 #include "Mesh.hpp"
 
-renderer::Mesh::Mesh() {
+renderer::Mesh::Mesh(GLenum mode, GLsizei vertexCount) :
+	_mode(mode),
+	_vertexCount(vertexCount)
+{
 	glGenVertexArrays(1, &_vao);
 }
 
@@ -39,4 +42,8 @@ const renderer::Vbo& renderer::Mesh::getVbo(VboHandle handle) const {
 
 void renderer::Mesh::bind() {
 	glBindVertexArray(_vao);
+}
+
+void renderer::Mesh::draw() {
+	glDrawArrays(_mode, 0, );
 }

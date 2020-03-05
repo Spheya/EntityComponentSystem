@@ -119,21 +119,21 @@ void renderer::ShaderProgram::removeCleanupFunction() {
 	_cleanupFunction = nullptr;
 }
 
-void renderer::ShaderProgram::addGlEnable(GLenum value) {
+void renderer::ShaderProgram::addEnable(GLenum value) {
 	assert(std::find(_enable.begin(), _enable.end(), value) == _enable.end());
 	_enable.push_back(value);
 }
 
-void renderer::ShaderProgram::removeGlEnable(GLenum value) {
+void renderer::ShaderProgram::removeEnable(GLenum value) {
 	_enable.erase(std::find(_enable.begin(), _enable.end(), value));
 }
 
-void renderer::ShaderProgram::addGlDisable(GLenum value) {
+void renderer::ShaderProgram::addDisable(GLenum value) {
 	assert(std::find(_disable.begin(), _disable.end(), value) == _disable.end());
 	_disable.push_back(value);
 }
 
-void renderer::ShaderProgram::removeGlDisable(GLenum value) {
+void renderer::ShaderProgram::removeDisable(GLenum value) {
 	_disable.erase(std::find(_disable.begin(), _disable.end(), value));
 }
 

@@ -11,7 +11,7 @@ namespace renderer {
 	public:
 		using VboHandle = size_t;
 
-		Mesh();
+		Mesh(GLenum mode, GLsizei vertexCount);
 		Mesh(const Mesh&) = delete;
 		Mesh& operator=(const Mesh&) = delete;
 		Mesh(Mesh&& other) noexcept;
@@ -25,8 +25,12 @@ namespace renderer {
 
 		void bind();
 
+		void draw();
+
 	private:
 		GLuint _vao;
 		std::vector<Vbo> _vbos;
+		GLenum _mode;
+		GLsizei _vertexCount;
 	};
 }

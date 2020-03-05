@@ -16,6 +16,8 @@ namespace renderer {
 		~Vbo();
 
 		void write(size_t length, const void* data);
+		
+		void bindAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized = GL_FALSE, GLsizei stride = 0, GLsizei first = 0);
 
 	private:
 		GLuint _id;
