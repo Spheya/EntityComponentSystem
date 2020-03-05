@@ -132,12 +132,12 @@ namespace ecs {
 		onRemove(entity);
 	}
 
-	template<typename ...Components>
+	template<typename ... Components>
 	inline const std::bitset<ECS_KEY_SIZE>& System<Components...>::getKey() const {
 		return _key;
 	}
 
-	template<typename ...Components>
+	template<typename ... Components>
 	inline bool System<Components...>::isMultithreaded() const {
 		return _multithreaded;
 	}

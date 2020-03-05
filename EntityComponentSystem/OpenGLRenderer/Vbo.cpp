@@ -28,7 +28,7 @@ void renderer::Vbo::write(size_t length, const void* data) {
 	glBufferData(GL_ARRAY_BUFFER, length, data, GL_STATIC_DRAW);
 }
 
-void renderer::Vbo::bindAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized = GL_FALSE, GLsizei stride, GLsizei first) {
+void renderer::Vbo::bindAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLsizei first) {
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
 	glEnableVertexAttribArray(index);
 	glVertexAttribPointer(

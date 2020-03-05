@@ -10,7 +10,7 @@ namespace ecs {
 
 	private:
 		virtual void free(void* element) = 0;
-		virtual void* insert(const void* data) = 0;
+		virtual void* insert(void* data) = 0;
 		virtual std::unique_ptr<IMemoryPoolAllocator> copy() = 0;
 	};
 
@@ -66,7 +66,7 @@ namespace ecs {
 		std::unique_ptr<MemoryPool> _currentPool;
 		typename MemoryPool::Element* _freeSpaces;
 
-		void* insert(const void* data) override;
+		void* insert(void* data) override;
 		void free(void* element) override {
 			free(reinterpret_cast<T*>(element));
 		};
@@ -113,8 +113,12 @@ namespace ecs {
 	}
 
 	template<typename T>
-	inline void* MemoryPoolAllocator<T>::insert(const void* data) {
-		return allocate(*reinterpret_cast<const T*>(data));
+	inline void* MemoryPoolAllocator<T>::insert(void* data) {
+		if constexpr (std::is_move_constructible_v<T>) {
+			return allocate(std::move(*reinterpret_cast<T*>(data)));
+		} else {
+			return allocate(*reinterpret_cast<const T*>(data));
+		}
 	}
 
 	template <typename T>

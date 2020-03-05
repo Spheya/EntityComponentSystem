@@ -45,5 +45,5 @@ void renderer::Mesh::bind() {
 }
 
 void renderer::Mesh::draw() {
-	glDrawArrays(_mode, 0, );
+	glDrawArrays(_mode, 0, _vertexCount);
 }

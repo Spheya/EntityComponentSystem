@@ -19,7 +19,7 @@ namespace ecs {
 			IComponentPrefab& operator=(IComponentPrefab&&) = default;
 			virtual ~IComponentPrefab() = default;
 
-			virtual const void* get() const = 0;
+			virtual void* get() const = 0;
 		};
 
 		template<typename T>
@@ -28,7 +28,7 @@ namespace ecs {
 			template<typename ... Args>
 			ComponentPrefab(Args&&... args);
 
-			const void* get() const override;
+			void* get() const override;
 
 		private:
 			std::unique_ptr<T> _ptr;
@@ -66,7 +66,7 @@ namespace ecs {
 		std::mutex _addComponentMutex;
 		std::mutex _removeComponentMutex;
 
-		size_t _entitiesToBeCreated;
+		size_t _entitiesToBeCreated = 0;
 		std::vector<std::vector<std::pair<Component::Id, IComponentPrefab*>>> _newEntityComponentAddBuffer;
 		std::unordered_map<Entity::Handle, std::vector<std::pair<Component::Id, IComponentPrefab*>>> _componentAddBuffer;
 		std::unordered_map<Entity::Handle, std::vector<Component::Id>> _componentRemovalBuffer;
@@ -75,11 +75,11 @@ namespace ecs {
 	template<typename T>
 	template<typename ...Args>
 	inline ChangeBuffer::ComponentPrefab<T>::ComponentPrefab(Args&& ...args) :
-		_ptr(std::make_unique<T>(args...))
+		_ptr(std::make_unique<T>(std::forward<Args>(args)...))
 	{}
 
 	template<typename T>
-	inline const void* ChangeBuffer::ComponentPrefab<T>::get() const {
+	inline void* ChangeBuffer::ComponentPrefab<T>::get() const {
 		return _ptr.get();
 	}
 
@@ -116,7 +116,7 @@ namespace ecs {
 	inline void ChangeBuffer::addComponent(ChangeBuffer::EntityPrefab entity, Args&& ... args) {
 		std::lock_guard<std::mutex> guard(_addComponentMutex);
 
-		_newEntityComponentAddBuffer[entity.id].push_back(std::make_pair(ecs::Component::getId<Component>(), new ComponentPrefab<Component>(args...)));
+		_newEntityComponentAddBuffer[entity.id].push_back(std::make_pair(ecs::Component::getId<Component>(), (IComponentPrefab*)new ComponentPrefab<Component>(std::forward<Args>(args)...)));
 	}
 	template<typename Component>
 	inline void ChangeBuffer::removeComponent(Entity::Handle entity) {

@@ -1,12 +1,12 @@
 #include "RenderSystem.hpp"
 
-void renderer::RenderSystem::onUpdate(float deltatime, const ecs::EntityGroup<EntityData>& entityGroup, ecs::ChangeBuffer&) {
+/*void renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&) {
 	std::unordered_map<GLenum, bool> enabled;
 
 	for (auto& entity : entityGroup) {
 		auto* drawComponent = entity.getComponent<DrawComponent>();
 
-		// Bind the sahder
+		// Bind the shader
 		drawComponent->shader->bind();
 		
 		// Enable and disable shader specific GL capabilities
@@ -29,7 +29,8 @@ void renderer::RenderSystem::onUpdate(float deltatime, const ecs::EntityGroup<En
 		drawComponent->shader->dispatchPreparation();
 		
 		// Bind the textures
-		drawComponent->textures->bind();
+		if(drawComponent->textures)
+			drawComponent->textures->bind();
 
 		// Bind the uniforms
 		drawComponent->instanceData.bindUniforms(*drawComponent->shader);
@@ -41,4 +42,4 @@ void renderer::RenderSystem::onUpdate(float deltatime, const ecs::EntityGroup<En
 		drawComponent->shader->dispatchCleanup();
 	}
 
-}
+}*/
