@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
 
-void renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&) {
+void renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>& entityGroup, ecs::ChangeBuffer&) {
 	std::unordered_map<GLenum, bool> enabled;
 
 	for (auto& entity : entityGroup) {
