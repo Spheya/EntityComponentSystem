@@ -9,6 +9,6 @@ namespace renderer {
 	public:
 		RenderSystem() : Base(false) {}
 
-		void onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&) {};
+		void onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&);
 	};
 }
