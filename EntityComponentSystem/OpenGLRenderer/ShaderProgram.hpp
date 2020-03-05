@@ -27,7 +27,7 @@ namespace renderer {
 		void dispatchPreparation() const;
 		void dispatchCleanup() const;
 
-		[[nodiscard]] GLint getUniformLocation(const std::string& uniform) const;
+		[[nodiscard]] GLint getUniformLocation(const std::string& uniform);
 
 		void addPreparationFunction(std::unique_ptr<std::function<void()>> preparation);
 		void removePreparationFunction();
@@ -53,7 +53,6 @@ namespace renderer {
 		std::vector<GLenum> _disable;
 		std::vector<GLenum> _enable;
 
-		// This data isn't being used, but owning the shaders makes sure they are kept alive
-		std::vector<std::shared_ptr<Shader>> _shaders;
+		std::unordered_map<std::string, GLint> _uniforms;
 	};
 }

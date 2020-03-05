@@ -9,13 +9,11 @@ renderer::ShaderProgram::ShaderProgram(std::vector<std::shared_ptr<Shader>> shad
 
 renderer::ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept {
 	_program = other._program;
-	_shaders = std::move(other._shaders);
 	other._program = 0;
 }
 
 renderer::ShaderProgram& renderer::ShaderProgram::operator=(ShaderProgram&& other) noexcept {
 	_program = other._program;
-	_shaders = std::move(other._shaders);
 	other._program = 0;
 
 	return *this;
@@ -70,8 +68,6 @@ void renderer::ShaderProgram::load(std::vector<std::shared_ptr<Shader>> shaders,
 		std::terminate();
 	}
 #endif
-
-	_shaders = std::move(shaders);
 }
 
 bool renderer::ShaderProgram::isValid() const {
@@ -96,8 +92,15 @@ void renderer::ShaderProgram::dispatchCleanup() const {
 		(*_cleanupFunction)();
 }
 
-GLint renderer::ShaderProgram::getUniformLocation(const std::string& uniform) const {
-	return glGetUniformLocation(_program, uniform.c_str());
+GLint renderer::ShaderProgram::getUniformLocation(const std::string& uniform) {
+	const auto it = _uniforms.find(uniform);
+
+	if (it == _uniforms.end()) {
+		GLint location = glGetUniformLocation(_program, uniform.c_str());
+		_uniforms.emplace(uniform, location);
+	}
+
+	return it->second;
 }
 
 void renderer::ShaderProgram::addPreparationFunction(std::unique_ptr<std::function<void()>> preparation) {

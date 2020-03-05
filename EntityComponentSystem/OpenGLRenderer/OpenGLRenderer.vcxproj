@@ -22,30 +22,25 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlfwGuard.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturePack.cpp" />
-    <ClCompile Include="UniformPack.cpp" />
-    <ClCompile Include="Vao.cpp" />
+    <ClCompile Include="InstanceData.cpp" />
+    <ClCompile Include="Vbo.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="GlfwGuard.hpp" />
     <ClInclude Include="Input.hpp" />
-    <ClInclude Include="Model.hpp" />
-    <ClInclude Include="RenderComponent.hpp" />
-    <ClInclude Include="RenderSystem.hpp" />
+    <ClInclude Include="Mesh.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />
     <ClInclude Include="Texture.hpp" />
     <ClInclude Include="TexturePack.hpp" />
-    <ClInclude Include="UniformPack.hpp" />
-    <ClInclude Include="Util.hpp" />
-    <ClInclude Include="Vao.hpp" />
+    <ClInclude Include="InstanceData.hpp" />
     <ClInclude Include="Vbo.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
