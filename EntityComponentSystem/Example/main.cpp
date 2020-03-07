@@ -36,9 +36,9 @@ int main() {
 	std::shared_ptr<renderer::Mesh> triangle = std::make_shared<renderer::Mesh>(GL_TRIANGLES, 3);
 	auto positionsVbo = triangle->createVbo();
 	GLfloat positions[] = {
-		0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		1.0f, 0.0f, 0.0f 
+		-0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f 
 	};
 	triangle->getVbo(positionsVbo).write(sizeof(positions), positions);
 	triangle->getVbo(positionsVbo).bindAttribPointer(0, 3, GL_FLOAT);
