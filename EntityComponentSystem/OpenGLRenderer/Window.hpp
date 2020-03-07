@@ -29,7 +29,10 @@ namespace renderer {
 		void update();
 		static void clear(bool colour, bool depth, bool stencil);
 
+		void enableVsync(bool enabled);
+
 		void makeCurrentContext();
+		static void detachCurrentContext();
 
 		void setTitle(const char* title);
 

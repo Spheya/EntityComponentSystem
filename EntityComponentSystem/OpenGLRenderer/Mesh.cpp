@@ -9,7 +9,9 @@ renderer::Mesh::Mesh(GLenum mode, GLsizei vertexCount) :
 
 renderer::Mesh::Mesh(Mesh&& other) noexcept :
 	_vao(other._vao),
-	_vbos(std::move(other._vbos))
+	_vbos(std::move(other._vbos)),
+	_mode(other._mode),
+	_vertexCount(other._vertexCount)
 {
 	other._vao = 0;
 }
@@ -17,6 +19,9 @@ renderer::Mesh::Mesh(Mesh&& other) noexcept :
 renderer::Mesh& renderer::Mesh::operator=(Mesh&& other) noexcept {
 	_vao = other._vao;
 	_vbos = std::move(other._vbos);
+	_mode = other._mode;
+	_vertexCount = other._vertexCount;
+
 	other._vao = 0;
 
 	return *this;

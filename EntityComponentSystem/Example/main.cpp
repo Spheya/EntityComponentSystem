@@ -14,8 +14,10 @@
 
 int main() {
 	renderer::GlfwGuard glfwGuard;
+
 	renderer::Window window("Slamanadr");
 	window.makeCurrentContext();
+	window.enableVsync(false);
 
 	ecs::Engine ecsEngine;
 
@@ -27,7 +29,7 @@ int main() {
 			std::make_shared<renderer::Shader>("default.frag", GL_FRAGMENT_SHADER)
 		},
 		std::vector<std::pair<std::string, GLuint>> {
-			{"a_position", 1},
+			{"a_position", 0},
 		}
 	);
 
@@ -35,20 +37,37 @@ int main() {
 	auto positionsVbo = triangle->createVbo();
 	GLfloat positions[] = {
 		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
 		1.0f, 0.0f, 0.0f 
 	};
 	triangle->getVbo(positionsVbo).write(3 * 3 * sizeof(GL_FLOAT), positions);
-	triangle->getVbo(positionsVbo).bindAttribPointer(1, 3, GL_FLOAT);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*) 0
+	);
 
 	auto& entity = ecsEngine.createEntity();
-	ecsEngine.addComponent(entity, renderer::DrawComponent(triangle, shader));
+	ecsEngine.addComponent(entity, renderer::DrawComponent(&window, triangle, shader));
 
 	float time = 0;
 	while (!window.isCloseRequested()) {
 		time += window.getDeltaTime();
 
+		//entity.getComponent<renderer::DrawComponent>()->mesh->draw();
+
 		ecsEngine.updateSystems(window.getDeltaTime());
 		window.update();
+		window.clear(true, true, false);
+
+		window.setTitle(("Slamanadr - " + std::to_string(1.0f / window.getDeltaTime()) + "fps").c_str());
+
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR) 
+			std::cout << "GL ERROR: " << error << std::endl;
 	}
 }

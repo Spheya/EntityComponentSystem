@@ -14,13 +14,15 @@
 #endif
 
 namespace ecs {
+	enum class SystemThreadingMode {
+		SINGLE_THREAD,
+		MULTI_THREAD,
+		MAIN_THREAD
+	};
+
 	class ISystem {
 	public:
-		ISystem() = default;
-		ISystem(ISystem&) = default;
-		ISystem& operator=(ISystem&) = default;
-		ISystem(ISystem&&) = default;
-		ISystem& operator=(ISystem&&) = default;
+		ISystem(SystemThreadingMode threadingMode) : _threadingMode(threadingMode) {}
 		virtual ~ISystem() = default;
 
 		virtual bool containsEntity(const Entity& entity) const = 0;
@@ -28,10 +30,14 @@ namespace ecs {
 		virtual void addEntity(Entity& entity) = 0;
 		virtual void removeEntity(Entity& entity) = 0;
 		virtual const std::bitset<ECS_KEY_SIZE>& getKey() const = 0;
-		virtual bool isMultithreaded() const = 0;
 		virtual size_t getEntityCount() const = 0;
 
+		virtual SystemThreadingMode getThreadingMode() const { return _threadingMode; }
+
 		virtual void update(float deltatime, ChangeBuffer& changeBuffer, size_t startEntity, size_t nEntities) = 0;
+
+	public:
+		SystemThreadingMode _threadingMode;
 	};
 
 	template<typename ... Components>
@@ -53,14 +59,13 @@ namespace ecs {
 			Entity::Handle getHandle() const { return _handle; }
 		};
 
-		explicit System(bool multithreaded);
+		explicit System(SystemThreadingMode threadingMode);
 
 		bool containsEntity(const Entity& entity) const override;
 		bool fitsEntity(const Entity& entity) const override;
 		void addEntity(Entity& entity) override;
 		void removeEntity(Entity& entity) override;
 		const std::bitset<ECS_KEY_SIZE>& getKey() const override;
-		bool isMultithreaded() const override;
 		size_t getEntityCount() const override;
 
 		void update(float deltatime, ChangeBuffer& changeBuffer, size_t startEntity, size_t nEntities) override;
@@ -77,7 +82,6 @@ namespace ecs {
 	private:
 		std::bitset<ECS_KEY_SIZE> _key;
 		std::vector<EntityData> _entities;
-		bool _multithreaded;
 
 		template<typename First, typename Second, typename ... T>
 		void buildKey();
@@ -93,8 +97,8 @@ namespace ecs {
 	};
 
 	template<typename ... Components>
-	inline System<Components...>::System(bool multithreaded) :
-		_multithreaded(multithreaded)
+	inline System<Components...>::System(SystemThreadingMode threadingMode) :
+		ISystem(threadingMode)
 	{
 		buildKey<Components...>();
 	}
@@ -135,11 +139,6 @@ namespace ecs {
 	template<typename ... Components>
 	inline const std::bitset<ECS_KEY_SIZE>& System<Components...>::getKey() const {
 		return _key;
-	}
-
-	template<typename ... Components>
-	inline bool System<Components...>::isMultithreaded() const {
-		return _multithreaded;
 	}
 
 	template<typename ... Components>

@@ -13,16 +13,19 @@ namespace ecs {
 		void dispatch(size_t threadCount);
 		void addJob(const std::function<void(void)>& job);
 
+		void join();
+
 	private:
 		std::queue<std::function<void(void)>> _jobs;
 		std::mutex _jobsMutex;
+
+		std::vector<std::thread> threads;
 	};
 
 	inline void JobQueue::dispatch(size_t threadCount) {
-		std::vector<std::thread> threads;
 		threads.reserve(threadCount);
 
-		for (size_t i = 0; i < threadCount; ++i) {
+		for (size_t i = 0; i < std::min(threadCount, _jobs.size()); ++i) {
 			threads.emplace_back([this]() {
 				while (true) {
 					std::function<void(void)> job;
@@ -41,13 +44,15 @@ namespace ecs {
 				}
 			});
 		}
-
-		for (auto& thread : threads)
-			thread.join();
 	}
 
 	inline void JobQueue::addJob(const std::function<void(void)>& job) {
 		_jobs.push(job);
+	}
+
+	inline void JobQueue::join() {
+		for (auto& thread : threads)
+			thread.join();
 	}
 
 }

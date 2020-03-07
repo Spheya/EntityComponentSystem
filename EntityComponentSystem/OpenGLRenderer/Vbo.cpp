@@ -37,6 +37,6 @@ void renderer::Vbo::bindAttribPointer(GLuint index, GLint size, GLenum type, GLb
 		type,
 		normalized,
 		stride,
-		(char*)first
+		(void*)first
 	);
 }

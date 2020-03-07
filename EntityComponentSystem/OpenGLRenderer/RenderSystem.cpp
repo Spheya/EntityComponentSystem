@@ -36,10 +36,13 @@ void renderer::RenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>&
 		drawComponent->instanceData.bindUniforms(*drawComponent->shader);
 
 		// Draw the mesh
+		drawComponent->mesh->bind();
+		glEnableVertexAttribArray(0);
 		drawComponent->mesh->draw();
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
 
 		// Dispatch some shader specific opengl calls for cleanup
 		drawComponent->shader->dispatchCleanup();
 	}
-
 }

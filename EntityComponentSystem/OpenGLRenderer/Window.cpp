@@ -35,6 +35,10 @@ void renderer::Window::clear(bool colour, bool depth, bool stencil) {
 	glClear((colour ? GL_COLOR_BUFFER_BIT : 0x0) | (depth ? GL_DEPTH_BUFFER_BIT : 0x0) | (stencil ? GL_STENCIL_BUFFER_BIT : 0x0));
 }
 
+void renderer::Window::enableVsync(bool enabled) {
+	glfwSwapInterval(enabled ? 1 : 0);
+}
+
 void renderer::Window::makeCurrentContext() {
 	glfwMakeContextCurrent(_window);
 	glfwSwapInterval(1);
@@ -47,6 +51,10 @@ void renderer::Window::makeCurrentContext() {
 		}
 		_glewSetup = true;
 	}
+}
+
+void renderer::Window::detachCurrentContext() {
+	glfwMakeContextCurrent(nullptr);
 }
 
 void renderer::Window::setTitle(const char* title) {
