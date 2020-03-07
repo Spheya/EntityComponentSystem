@@ -39,7 +39,6 @@ namespace ecs {
 		bool containsSystem() const;
 
 		void updateSystems(float deltatime);
-		void updateSystems(float deltatime, size_t nThreads);
 
 	private:
 		std::vector<std::unique_ptr<Entity>> _entities;
@@ -63,6 +62,8 @@ namespace ecs {
 
 		template<typename Last>
 		void _removeComponents(Entity& entity);
+
+		ctpl::thread_pool _threads;
 	};
 
 	inline Entity& Engine::createEntity() {
@@ -194,14 +195,10 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
-		updateSystems(deltatime, std::thread::hardware_concurrency());
-	}
-
-	inline void Engine::updateSystems(float deltatime, size_t nThreads) {
 		ChangeBuffer buffer;
 
 		for (auto& systemBatch : _systemBatches) {
-			systemBatch.update(deltatime, buffer, nThreads);
+			systemBatch.update(deltatime, buffer, _threads);
 		}
 
 

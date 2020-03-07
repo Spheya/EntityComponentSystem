@@ -2,8 +2,9 @@
 
 #include <thread>
 
+#include <ctpl.h>
+
 #include "System.hpp"
-#include "JobQueue.hpp"
 
 #ifndef ECS_KEY_SIZE
 #define ECS_KEY_SIZE 256
@@ -20,7 +21,7 @@ namespace ecs {
 		void removeSystem(ISystem* system);
 		bool containsSystem(ISystem* system);
 		bool fitsSystem(const ISystem* system) const;
-		void update(float deltatime, ChangeBuffer& changeBuffers, size_t nThreads);
+		void update(float deltatime, ChangeBuffer& changeBuffer, ctpl::thread_pool& pool);
 
 	private:
 		std::vector<ISystem*> _systems;
@@ -60,9 +61,7 @@ namespace ecs {
 		return temp.none();
 	}
 
-	inline void SystemBatch::update(float deltatime, ChangeBuffer& changeBuffer, size_t nThreads) {
-		JobQueue queue;
-
+	inline void SystemBatch::update(float deltatime, ChangeBuffer& changeBuffer, ctpl::thread_pool& pool) {
 		std::function<void(void)> mainThreadSystem;
 
 		for (auto& system : _systems) {
@@ -71,18 +70,18 @@ namespace ecs {
 				{
 					// Add every complete group to the queue
 					for (size_t i = ENTITIES_PER_THREAD; i < system->getEntityCount(); i += ENTITIES_PER_THREAD) {
-						queue.addJob([&, i]() {
+						pool.push([&, i](int) {
 							system->update(deltatime, changeBuffer, i - ENTITIES_PER_THREAD, ENTITIES_PER_THREAD);
-									 });
+						});
 					}
 
 					// Add the last group of entities as a smaller group
 					size_t size = system->getEntityCount() % ENTITIES_PER_THREAD;
 					if (size != 0) {
 						size_t begin = system->getEntityCount() - size;
-						queue.addJob([&]() {
+						pool.push([&](int) {
 							system->update(deltatime, changeBuffer, begin, size);
-									 });
+						});
 					}
 					break;
 				}
@@ -90,7 +89,7 @@ namespace ecs {
 				case SystemThreadingMode::SINGLE_THREAD:
 				{
 					// Add the whole system as a single job when the system cannot be run on multiple threads
-					queue.addJob([&]() {
+					pool.push([&](int) {
 						system->update(deltatime, changeBuffer, 0, system->getEntityCount());
 					});
 					break;
@@ -106,8 +105,7 @@ namespace ecs {
 			}
 		}
 
-		queue.dispatch(nThreads);
 		mainThreadSystem();
-		queue.join();
+		pool.synchronize();
 	}
 }

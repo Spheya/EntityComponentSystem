@@ -127,7 +127,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -154,7 +154,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -183,7 +183,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -214,7 +214,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>

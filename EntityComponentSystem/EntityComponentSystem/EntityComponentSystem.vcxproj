@@ -25,7 +25,6 @@
     <ClInclude Include="ECS\Engine.hpp" />
     <ClInclude Include="ECS\Entity.hpp" />
     <ClInclude Include="ECS\EntityGroup.hpp" />
-    <ClInclude Include="ECS\JobQueue.hpp" />
     <ClInclude Include="ECS\MemoryPoolAllocator.hpp" />
     <ClInclude Include="ECS\System.hpp" />
     <ClInclude Include="ECS\SystemBatch.hpp" />
@@ -86,17 +85,21 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(Solutiondir)deps\ctpl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(Solutiondir)deps\ctpl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(Solutiondir)deps\ctpl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(Solutiondir)deps\ctpl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

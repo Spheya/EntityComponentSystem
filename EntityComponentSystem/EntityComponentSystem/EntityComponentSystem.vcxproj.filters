@@ -33,9 +33,6 @@
     <ClInclude Include="ECS\EntityGroup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\JobQueue.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\MemoryPoolAllocator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -86,7 +86,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -106,7 +106,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -128,7 +128,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -152,7 +152,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EntityComponentSystem;$(SolutionDir)OpenGLRenderer;$(SolutionDir)Core;$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;$(Solutiondir)deps\ctpl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4201</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
