@@ -10,6 +10,10 @@ namespace ecs {
 
 	class Engine {
 	public:
+		Engine() :
+			_threads(std::thread::hardware_concurrency())
+		{}
+
 		Entity& createEntity();
 
 		void deleteEntity(Entity::Handle handle);
@@ -39,6 +43,8 @@ namespace ecs {
 		bool containsSystem() const;
 
 		void updateSystems(float deltatime);
+
+		void updateSystems(float deltatime, size_t nThreads);
 
 	private:
 		std::vector<std::unique_ptr<Entity>> _entities;
@@ -231,6 +237,11 @@ namespace ecs {
 
 			systemCheckEntity(entity);
 		}
+	}
+
+	inline void Engine::updateSystems(float deltatime, size_t nThreads) {
+		_threads.resize(nThreads);
+		updateSystems(deltatime);
 	}
 
 	inline void Engine::systemCheckEntity(Entity& entity) {

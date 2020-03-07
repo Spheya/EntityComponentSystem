@@ -40,34 +40,23 @@ int main() {
 		0.5f, 0.5f, 0.0f,
 		1.0f, 0.0f, 0.0f 
 	};
-	triangle->getVbo(positionsVbo).write(3 * 3 * sizeof(GL_FLOAT), positions);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
+	triangle->getVbo(positionsVbo).write(sizeof(positions), positions);
+	triangle->getVbo(positionsVbo).bindAttribPointer(0, 3, GL_FLOAT);
 
 	auto& entity = ecsEngine.createEntity();
 	ecsEngine.addComponent(entity, renderer::DrawComponent(&window, triangle, shader));
 
-	float time = 0;
 	while (!window.isCloseRequested()) {
-		time += window.getDeltaTime();
-
-		//entity.getComponent<renderer::DrawComponent>()->mesh->draw();
+		const clock_t begin_time = clock();
 
 		ecsEngine.updateSystems(window.getDeltaTime());
 		window.update();
 		window.clear(true, true, false);
 
-		window.setTitle(("Slamanadr - " + std::to_string(1.0f / window.getDeltaTime()) + "fps").c_str());
-
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) 
 			std::cout << "GL ERROR: " << error << std::endl;
+
+		window.setTitle(("Slamanadr - Frame time: " + std::to_string((clock() - begin_time) / (CLOCKS_PER_SEC / 1000)) + "ms - " + std::to_string(unsigned(1.0f / window.getDeltaTime())) + " FPS").c_str());
 	}
 }
