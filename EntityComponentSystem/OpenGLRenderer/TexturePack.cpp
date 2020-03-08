@@ -5,9 +5,9 @@ renderer::TexturePack::TexturePack(std::initializer_list<std::shared_ptr<const T
 	_textures(textures)
 {}
 
-GLuint renderer::TexturePack::add(std::shared_ptr<const Texture> texture) {
+GLint renderer::TexturePack::add(std::shared_ptr<const Texture> texture) {
 	_textures.push_back(std::move(texture));
-	return GLuint(_textures.size()) - 1;
+	return GLint(_textures.size()) - 1;
 }
 
 void renderer::TexturePack::bind() const {

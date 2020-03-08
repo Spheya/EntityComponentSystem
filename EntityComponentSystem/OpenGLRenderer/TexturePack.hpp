@@ -9,7 +9,7 @@ namespace renderer {
 		TexturePack() = default;
 		TexturePack(std::initializer_list<std::shared_ptr<const Texture>> textures);
 
-		GLuint add(std::shared_ptr<const Texture> texture);
+		GLint add(std::shared_ptr<const Texture> texture);
 
 		void bind() const;
 		void unbind() const;

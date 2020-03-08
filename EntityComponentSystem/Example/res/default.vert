@@ -1,17 +1,17 @@
 #version 330
 
-attribute vec3 position;
-attribute vec2 uvCoords;
-attribute vec3 normal;
+in vec3 position;
+in vec2 uvCoords;
+in vec3 normal;
 
 instance mat4 modelMatrix;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
-varying vec3 v_colour;
+out vec2 uv;
 
 void main() {
-	v_colour = position;
+	uv = uvCoords;
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 }

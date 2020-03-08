@@ -176,6 +176,9 @@
     <None Include="res\monki.obj" />
     <None Include="res\sphere.obj" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\floorTexture.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

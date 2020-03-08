@@ -34,15 +34,15 @@ renderer::Texture::~Texture() {
 		glDeleteTextures(1, &_textureId);
 }
 
-void renderer::Texture::loadFromFile(const std::string& fileName) {
+void renderer::Texture::loadFromFile(const std::string& fileName, GLenum filter) {
 	unsigned char* data = stbi_load(fileName.c_str(), &_width, &_height, &_channels, 0);
 
-	loadFromMemory(data, _channels, _width, _height);
+	loadFromMemory(data, _channels, _width, _height, filter);
 
 	stbi_image_free(data);
 }
 
-void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height) {
+void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height, GLenum filter) {
 	if (_textureId == 0)
 		glGenTextures(1, &_textureId);
 
@@ -75,11 +75,11 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 
 	_type = GL_TEXTURE_2D;
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 }
 
-void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth) {
+void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth, GLenum filter) {
 	if (_textureId == 0)
 		glGenTextures(1, &_textureId);
 
@@ -113,8 +113,8 @@ void renderer::Texture::loadFromMemory(const unsigned char* data, int channels, 
 
 	_type = GL_TEXTURE_3D;
 
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, filter);
 
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);

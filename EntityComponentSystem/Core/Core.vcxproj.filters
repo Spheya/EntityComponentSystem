@@ -24,6 +24,9 @@
     <ClInclude Include="Transform.hpp">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
+    <ClInclude Include="MathConstants.hpp">
+      <Filter>Header Files\maths</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Transform.cpp">

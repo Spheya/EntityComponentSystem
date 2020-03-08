@@ -16,9 +16,9 @@ namespace renderer {
 		Texture& operator=(Texture&& other) noexcept;
 		~Texture();
 
-		void loadFromFile(const std::string& fileName);
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height);
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth);
+		void loadFromFile(const std::string& fileName, GLenum filter = GL_LINEAR);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height, GLenum filter);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth, GLenum filter);
 
 		void bind(unsigned slot) const;
 		void unbind(unsigned slot) const;

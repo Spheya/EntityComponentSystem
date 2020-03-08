@@ -24,7 +24,8 @@ void renderer::Window::update() {
 
 	// Calculate the deltatime
 	const float time = float(glfwGetTime());
-	_deltaTime = time - _time;
+	if(_time != 0.0f)
+		_deltaTime = time - _time;
 	_time = time;
 
 	// Prepare input for the next frame

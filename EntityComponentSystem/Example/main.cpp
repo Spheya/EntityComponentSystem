@@ -17,20 +17,18 @@
 int main() {
 	renderer::GlfwGuard glfwGuard;
 
+	// Setup window
 	renderer::Window window("Slamanadr");
 	window.makeCurrentContext();
 	window.enableVsync(false);
 
-	glEnable(GL_DEPTH_TEST);
-
+	// Setup ecs
 	ecs::Engine ecsEngine;
 
-	renderer::Camera camera(0.1f, 100.0f, 70.0f);
-
-	auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window);
-
+	const auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window);
 	ecsEngine.registerSystem(modelRenderSystem);
 
+	// Load the shader
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
 	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{
 		std::make_shared<renderer::Shader>("res/default.vert", GL_VERTEX_SHADER),
@@ -42,75 +40,82 @@ int main() {
 			{"normal", 2},
 		}
 	);
+	shader->addEnable(GL_DEPTH_TEST);
 
-	std::shared_ptr<renderer::Model> triangle = std::make_shared<renderer::Model>(
-		"res/doof.obj"
+	// Load textures
+	auto floorTexture = std::make_shared<renderer::Texture>();
+	floorTexture->loadFromFile("res/floorTexture.png", GL_NEAREST);
+
+	std::shared_ptr<renderer::TexturePack> floorTexturePack = std::make_shared<renderer::TexturePack>();
+	const auto floorTextureId = floorTexturePack->add(floorTexture);
+
+	// Load models
+	float floorSize = 40;
+	auto floorModel = std::make_shared<renderer::Model>(
+		std::vector<GLuint>{ 0, 1, 2, 3, 2, 0 },
+		std::vector<glm::vec3>{
+			glm::vec3(-0.5f, 0.0f, +0.5f),
+			glm::vec3(-0.5f, 0.0f, -0.5f),
+			glm::vec3(+0.5f, 0.0f, -0.5f),
+			glm::vec3(+0.5f, 0.0f, +0.5f)
+		},
+		std::vector<glm::vec2>{
+			glm::vec2(            0.0f, floorSize * 0.5f),
+			glm::vec2(            0.0f,             0.0f),
+			glm::vec2(floorSize * 0.5f,             0.0f),
+			glm::vec2(floorSize * 0.5f, floorSize * 0.5f)
+		},
+		std::vector<glm::vec3>{
+			glm::vec3(0.0f, 1.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f)
+		}
 	);
 
-	auto& entity = ecsEngine.createEntity();
-	ecsEngine.addComponent(entity, renderer::ModelRenderComponent(Transform(
-		glm::vec3(1.0f, 1.0f, -5.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(1.0f))
-	,triangle, shader));
+	auto testModel = std::make_shared<renderer::Model>("res/monki.obj");
 
-	auto& entity2 = ecsEngine.createEntity();
-	ecsEngine.addComponent(entity2, renderer::ModelRenderComponent(Transform(
-		glm::vec3(-1.0f, -1.0f, -5.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(1.0f))
-		, triangle, shader));
+	// Create entities
+	for (int i = 0; i < 10; ++i) {
+		auto& entity = ecsEngine.createEntity();
+		ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
+			Transform(glm::vec3(i * 1.5f - 5.0f * 1.5f, -1.0f, -4.0f), glm::vec3(), glm::vec3(0.5f)),
+			testModel,
+			shader,
+			floorTexturePack
+		));
+	}
 
+	auto& floorEntity = ecsEngine.createEntity();
+	ecsEngine.addComponent(floorEntity, renderer::ModelRenderComponent(
+		Transform(),
+		floorModel,
+		shader,
+		floorTexturePack
+	));
+	floorEntity.getComponent<renderer::ModelRenderComponent>()->instanceData.store("tex", (int)floorTextureId);
+	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setScale(glm::vec3(floorSize));
+	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setPosition(glm::vec3(0.0f, -1.7f, 0.0f));
 
-
+	// Setup the camera
+	renderer::Camera camera(0.1f, 100.0f, 70.0f);
 	window.getInput()->enableLockedMouse();
 
+	// Gameloop
 	while (!window.isCloseRequested()) {
-		const clock_t begin_time = clock();
-
-		const bool forward = window.getInput()->isKeyDown(GLFW_KEY_W) || window.getInput()->isKeyDown(GLFW_KEY_UP);
-		const bool backward = window.getInput()->isKeyDown(GLFW_KEY_S) || window.getInput()->isKeyDown(GLFW_KEY_DOWN);
-		const bool left = window.getInput()->isKeyDown(GLFW_KEY_A) || window.getInput()->isKeyDown(GLFW_KEY_LEFT);
-		const bool right = window.getInput()->isKeyDown(GLFW_KEY_D) || window.getInput()->isKeyDown(GLFW_KEY_RIGHT);
-
-		const bool up = window.getInput()->isKeyDown(GLFW_KEY_SPACE);
-		const bool down = window.getInput()->isKeyDown(GLFW_KEY_LEFT_SHIFT) || window.getInput()->isKeyDown(GLFW_KEY_RIGHT_SHIFT);
-
-		glm::vec3 deltaPos(
-			float(right - left),
-			float(up - down),
-			float(forward - backward)
-		);
-		deltaPos *= 0.02f;
-
-		if (forward - backward && right - left)
-			deltaPos *= 0.8f;
-
-		camera.getTransform().rotate(
-			glm::vec3(
-				window.getInput()->getMouseDelta().y * -1.0f,
-				window.getInput()->getMouseDelta().x * 1.0f,
-				0.0f
-			)
-		);
-
-		camera.getTransform().move(deltaPos * window.getDeltaTime());
-
-		camera.getTransform().move(deltaPos);
-
-		ecsEngine.updateSystems(window.getDeltaTime());
-		window.update();
-		window.clear(true, true, false);
-
-		entity.getComponent<renderer::ModelRenderComponent>()->transform.rotate(glm::vec3(0.0f, 0.0f, window.getDeltaTime()));
-		entity2.getComponent<renderer::ModelRenderComponent>()->transform.rotate(glm::vec3(0.0f, 0.0f, window.getDeltaTime()));
-
+		camera.processDebugMovement(*window.getInput(), window.getDeltaTime());
 		modelRenderSystem->updateCamera(camera);
 
+		ecsEngine.updateSystems(window.getDeltaTime());
+
+		window.update();
+		window.clear(true, true, false);
+		window.setTitle(("Slamanadr - Frame time: " + std::to_string(window.getDeltaTime() * 1000.0f) + "ms - " + std::to_string(unsigned(1.0f / window.getDeltaTime())) + " FPS").c_str());
+
+#ifdef _DEBUG
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) 
 			std::cout << "GL ERROR: " << error << std::endl;
-
-		window.setTitle(("Slamanadr - Frame time: " + std::to_string((clock() - begin_time) / (CLOCKS_PER_SEC / 1000)) + "ms - " + std::to_string(unsigned(1.0f / window.getDeltaTime())) + " FPS").c_str());
+#endif
 	}
 }

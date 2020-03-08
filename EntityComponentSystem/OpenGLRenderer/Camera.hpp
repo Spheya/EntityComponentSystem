@@ -23,6 +23,8 @@ namespace renderer {
 		void setFar(float far);
 		void setFov(float fov);
 
+		void processDebugMovement(const Input& input, float deltatime);
+
 	private:
 		Transform _transform;
 

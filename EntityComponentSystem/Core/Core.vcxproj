@@ -22,6 +22,7 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MathConstants.hpp" />
     <ClInclude Include="Transform.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
