@@ -7,16 +7,16 @@
 #include "Vbo.hpp"
 
 namespace renderer {
-	class Mesh {
+	class Vao {
 	public:
 		using VboHandle = size_t;
 
-		Mesh(GLenum mode, GLsizei vertexCount);
-		Mesh(const Mesh&) = delete;
-		Mesh& operator=(const Mesh&) = delete;
-		Mesh(Mesh&& other) noexcept;
-		Mesh& operator=(Mesh&& other) noexcept;
-		~Mesh();
+		Vao(GLenum mode, GLsizei vertexCount);
+		Vao(const Vao&) = delete;
+		Vao& operator=(const Vao&) = delete;
+		Vao(Vao&& other) noexcept;
+		Vao& operator=(Vao&& other) noexcept;
+		~Vao();
 
 		VboHandle createVbo();
 

@@ -6,11 +6,12 @@
 
 #include <GlfwGuard.hpp>
 #include <Window.hpp>
-#include <RenderSystem.hpp>
+#include <Vao.hpp>
 #include <ShaderProgram.hpp>
 #include <TexturePack.hpp>
 #include <Vbo.hpp>
 #include <Camera.hpp>
+#include <ModelRenderSystem.hpp>
 
 int main() {
 	renderer::GlfwGuard glfwGuard;
@@ -21,7 +22,7 @@ int main() {
 
 	ecs::Engine ecsEngine;
 
-	ecsEngine.registerSystem<renderer::RenderSystem>(std::make_unique<renderer::RenderSystem>());
+	ecsEngine.registerSystem(std::make_unique<renderer::ModelRenderSystem>());
 
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
 	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{
@@ -33,18 +34,16 @@ int main() {
 		}
 	);
 
-	std::shared_ptr<renderer::Mesh> triangle = std::make_shared<renderer::Mesh>(GL_TRIANGLES, 3);
-	auto positionsVbo = triangle->createVbo();
-	GLfloat positions[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f 
-	};
-	triangle->getVbo(positionsVbo).write(sizeof(positions), positions);
-	triangle->getVbo(positionsVbo).bindAttribPointer(0, 3, GL_FLOAT);
+	std::shared_ptr<renderer::Model> triangle = std::make_shared<renderer::Model>(
+		std::vector<glm::vec3>{	
+			glm::vec3(-0.5f, -0.5f, 0.0f),
+			glm::vec3(0.0f, 0.5f, 0.0f),
+			glm::vec3(0.5f, -0.5f, 0.0f) 
+		}
+	);
 
 	auto& entity = ecsEngine.createEntity();
-	ecsEngine.addComponent(entity, renderer::DrawComponent(&window, triangle, shader));
+	ecsEngine.addComponent(entity, renderer::ModelRenderComponent(triangle, shader));
 
 	while (!window.isCloseRequested()) {
 		const clock_t begin_time = clock();

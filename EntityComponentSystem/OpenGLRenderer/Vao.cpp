@@ -1,4 +1,4 @@
-#include "Mesh.hpp"
+#include "Vao.hpp"
 
 renderer::Vao::Vao(GLenum mode, GLsizei vertexCount) :
 	_mode(mode),

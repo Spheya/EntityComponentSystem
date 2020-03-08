@@ -2,10 +2,10 @@
 
 #include <ECS/System.hpp>
 
-#include "DrawComponent.hpp"
+#include "ModelRenderComponent.hpp"
 
 namespace renderer {
-	class RenderSystem : public ecs::System<DrawComponent> {
+	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {
 	public:
 		RenderSystem() : Base(ecs::SystemThreadingMode::MAIN_THREAD) {}
 
