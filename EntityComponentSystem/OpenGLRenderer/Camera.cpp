@@ -29,7 +29,7 @@ glm::mat4 renderer::Camera::getProjectionMatrix(Window& window) const {
 	return glm::mat4(
 		1.0f/(aspect * angle), 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f/angle, 0.0f, 0.0f,
-		0.0f, 0.0f, (-_near - _far) / (_near - _far), 1.0f,
+		0.0f, 0.0f, -(-_near - _far) / (_near - _far), -1.0f,
 		0.0f, 0.0f, (2.0f * _near * _far) / (_near - _far), 0.0f
 	);
 }

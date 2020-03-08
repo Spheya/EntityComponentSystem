@@ -12,8 +12,12 @@
 #include <Vbo.hpp>
 #include <Camera.hpp>
 #include <ModelRenderSystem.hpp>
+#include <ShaderPreprocessor.hpp>
 
 int main() {
+	std::cout << renderer::ShaderPreprocessor::process("default.vert", false);
+
+
 	renderer::GlfwGuard glfwGuard;
 
 	renderer::Window window("Slamanadr");
@@ -22,7 +26,10 @@ int main() {
 
 	ecs::Engine ecsEngine;
 
-	auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>();
+	renderer::Camera camera(0.1f, 100.0f, 70.0f);
+
+	auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window);
+	modelRenderSystem->updateCamera(camera);
 
 	ecsEngine.registerSystem(modelRenderSystem);
 
@@ -34,7 +41,7 @@ int main() {
 		std::vector<std::pair<std::string, GLuint>> {
 			{"a_position", 0},
 		}
-		);
+	);
 
 	std::shared_ptr<renderer::Model> triangle = std::make_shared<renderer::Model>(
 		std::vector<GLuint> {
@@ -50,7 +57,18 @@ int main() {
 	);
 
 	auto& entity = ecsEngine.createEntity();
-	ecsEngine.addComponent(entity, renderer::ModelRenderComponent(triangle, shader));
+	ecsEngine.addComponent(entity, renderer::ModelRenderComponent(Transform(
+		glm::vec3(1.0f, 1.0f, -2.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f))
+	,triangle, shader));
+
+	auto& entity2 = ecsEngine.createEntity();
+	ecsEngine.addComponent(entity2, renderer::ModelRenderComponent(Transform(
+		glm::vec3(-1.0f, -1.0f, -2.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f))
+		, triangle, shader));
 
 	while (!window.isCloseRequested()) {
 		const clock_t begin_time = clock();
@@ -58,6 +76,9 @@ int main() {
 		ecsEngine.updateSystems(window.getDeltaTime());
 		window.update();
 		window.clear(true, true, false);
+
+		entity.getComponent<renderer::ModelRenderComponent>()->transform.rotate(glm::vec3(0.0f, 0.0f, window.getDeltaTime()));
+		entity2.getComponent<renderer::ModelRenderComponent>()->transform.rotate(glm::vec3(0.0f, 0.0f, window.getDeltaTime()));
 
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) 

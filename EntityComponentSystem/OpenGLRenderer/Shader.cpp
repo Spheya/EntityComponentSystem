@@ -1,6 +1,9 @@
 #include "Shader.hpp"
+
 #include <fstream>
 #include <iostream>
+
+#include "ShaderPreprocessor.hpp"
 
 renderer::Shader::Shader(const std::string& filename, GLenum type) :
 	_type(type)
@@ -27,48 +30,59 @@ renderer::Shader::~Shader() {
 		glDeleteShader(_id);
 }
 
-void renderer::Shader::loadFromString(const std::string& source) {
-	// Delete the shader if it already exists
-	if (_id != 0)
-		glDeleteShader(_id);
+GLuint renderer::Shader::loadFromString(const std::string& source, GLenum type) {
+	GLuint id;
 
 	// Create a new shader
-	_id = glCreateShader(_type);
+	id = glCreateShader(type);
 
 	// Send the source to the gpu
 	GLint length = GLint(source.length());
 	auto src = static_cast<const GLchar*>(source.c_str());
-	glShaderSource(_id, 1, &src, &length);
+	glShaderSource(id, 1, &src, &length);
 
 	// Compile
-	glCompileShader(_id);
+	glCompileShader(id);
 
 #ifdef _DEBUG
 	// Check if the shader compiled correctly
 	GLint compiled;
-	glGetShaderiv(_id, GL_COMPILE_STATUS, &compiled);
+	glGetShaderiv(id, GL_COMPILE_STATUS, &compiled);
 	if (compiled == GL_FALSE) {
 		// Print the error message
 		GLint infoLength = 0;
-		glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &infoLength);
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLength);
 
 		if (infoLength > 1) {
 			char* info = new char[infoLength];
-			glGetShaderInfoLog(_id, infoLength, nullptr, info);
+			glGetShaderInfoLog(id, infoLength, nullptr, info);
 			std::cout << "Error while compiling shader: \n" << info << std::endl;
 			delete[] info;
 		}
-		glDeleteShader(_id);
-		_id = 0;
+		glDeleteShader(id);
+		id = 0;
 		std::terminate();
 	}
 #endif
+
+	return id;
 }
 
 void renderer::Shader::loadFromFile(const std::string& filename) {
-	std::ifstream t(filename);
-	const std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-	loadFromString(str);
+	// Delete the shader if it already exists
+	if (_id != 0)
+		glDeleteShader(_id);
+
+	if (_instancedId != 0)
+		glDeleteShader(_instancedId);
+
+	// Load the shader code through the preprocessor
+	const std::string defaultShader = ShaderPreprocessor::process(filename, false);
+	const std::string instancedShader = ShaderPreprocessor::process(filename, true);
+	
+	// Compile the code
+	_id = loadFromString(defaultShader, _type);
+	_instancedId = loadFromString(instancedShader, _type);
 }
 
 bool renderer::Shader::isValid() const {

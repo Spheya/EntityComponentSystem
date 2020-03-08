@@ -51,9 +51,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="TexturePack.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
@@ -72,6 +69,12 @@
     <ClCompile Include="ModelRenderSystem.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderPreprocessor.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlfwGuard.hpp">
@@ -87,9 +90,6 @@
       <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Camera.hpp">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderProgram.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="TexturePack.hpp">
@@ -115,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="ModelRenderSystem.hpp">
       <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPreprocessor.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.hpp">
+      <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

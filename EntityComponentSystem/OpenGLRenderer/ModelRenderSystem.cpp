@@ -8,6 +8,7 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 
 		// Bind the shader
 		renderComponent->shader->bind();
+		_globalInstanceData.bindUniforms(*renderComponent->shader);
 
 		// Enable and disable shader specific GL capabilities
 		for (GLenum enable : renderComponent->shader->getEnables()) {
@@ -33,7 +34,8 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 			renderComponent->textures->bind();
 
 		// Bind the uniforms
-		renderComponent->model->getInstanceData().bindUniforms(*renderComponent->shader);
+		renderComponent->instanceData.store("modelMatrix", renderComponent->transform.getMatrix());
+		renderComponent->instanceData.bindUniforms(*renderComponent->shader);
 
 		// Draw the mesh
 		auto& vao = renderComponent->model->getVao();
@@ -43,4 +45,9 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		// Dispatch some shader specific opengl calls for cleanup
 		renderComponent->shader->dispatchCleanup();
 	}
+}
+
+void renderer::ModelRenderSystem::updateCamera(const Camera& camera) {
+	_globalInstanceData.store("projectionMatrix", camera.getProjectionMatrix(*_window));
+	_globalInstanceData.store("viewMatrix", camera.getViewMatrix());
 }

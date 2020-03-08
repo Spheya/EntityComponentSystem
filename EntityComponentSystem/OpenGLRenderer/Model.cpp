@@ -28,30 +28,6 @@ renderer::Model::Model(const std::vector<GLuint>& indices, const std::vector<glm
 	_vao.setIndexBuffer(indices);
 }
 
-renderer::InstanceData& renderer::Model::getInstanceData() {
-	return _instanceData;
-}
-
-const renderer::InstanceData& renderer::Model::getInstanceData() const {
-	return _instanceData;
-}
-
-void renderer::Model::setTransform(const Transform& transform) {
-	_transform = transform;
-}
-
-Transform& renderer::Model::getTransform() {
-	return _transform;
-}
-
-const Transform& renderer::Model::getTransform() const {
-	return _transform;
-}
-
-void renderer::Model::updateInstanceData() {
-	_instanceData.store("transformationMatrix", _transform.getMatrix());
-}
-
 renderer::Vao& renderer::Model::getVao() {
 	return _vao;
 }

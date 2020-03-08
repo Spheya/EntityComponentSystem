@@ -45,12 +45,24 @@ namespace renderer {
 	template<typename T>
 	inline void InstanceData::store(const std::string& name, T&& value) {
 		auto data = dynamic_cast<Uniform<T>*>(_uniforms[name].get());
+		if (!data) {
+			auto ptr = std::make_unique<Uniform<T>>();
+			data = ptr.get();
+			_uniforms[name] = std::move(ptr);
+		}
+
 		data->data = std::move(value);
 	}
 
 	template<typename T>
 	inline void InstanceData::store(const std::string& name, const T& value) {
 		auto data = dynamic_cast<Uniform<T>*>(_uniforms[name].get());
+		if (!data) {
+			auto ptr = std::make_unique<Uniform<T>>();
+			data = ptr.get();
+			_uniforms[name] = std::move(ptr);
+		}
+
 		data->data = value;
 	}
 

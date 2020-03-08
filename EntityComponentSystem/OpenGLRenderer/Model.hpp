@@ -20,16 +20,9 @@ namespace renderer {
 		InstanceData& getInstanceData();
 		const InstanceData& getInstanceData() const;
 
-		void setTransform(const Transform& transform);
-		Transform& getTransform();
-		const Transform& getTransform() const;
-
 	private:
-		void updateInstanceData();
 		Vao& getVao();
 
-		InstanceData _instanceData;
-		Transform _transform;
 		Vao _vao;
 	};
 }

@@ -14,7 +14,6 @@ namespace renderer {
 		Shader& operator=(Shader&& other) noexcept;
 		~Shader();
 
-		void loadFromString(const std::string& source);
 		void loadFromFile(const std::string& filename);
 
 		[[nodiscard]] bool isValid() const;
@@ -22,7 +21,10 @@ namespace renderer {
 		[[nodiscard]] GLuint getId() const;
 
 	private:
+		static GLuint loadFromString(const std::string& source, GLenum type);
+		
 		GLenum _type = 0;
 		GLuint _id = 0;
+		GLuint _instancedId = 0;
 	};
 }
