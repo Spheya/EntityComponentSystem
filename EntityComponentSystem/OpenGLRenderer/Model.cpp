@@ -22,6 +22,12 @@ renderer::Model::Model(const std::vector<glm::vec3>& positions, const std::vecto
 	}
 }
 
+renderer::Model::Model(const std::vector<GLuint>& indices, const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) :
+	Model(positions, uvCoords, normals)
+{
+	_vao.setIndexBuffer(indices);
+}
+
 renderer::InstanceData& renderer::Model::getInstanceData() {
 	return _instanceData;
 }

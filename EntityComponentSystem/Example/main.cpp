@@ -32,12 +32,17 @@ int main() {
 		std::vector<std::pair<std::string, GLuint>> {
 			{"a_position", 0},
 		}
-	);
+		);
 
 	std::shared_ptr<renderer::Model> triangle = std::make_shared<renderer::Model>(
+		std::vector<GLuint> {
+			0, 1, 2, 3, 2, 0
+		},
+
 		std::vector<glm::vec3>{	
 			glm::vec3(-0.5f, -0.5f, 0.0f),
-			glm::vec3(0.0f, 0.5f, 0.0f),
+			glm::vec3(-0.5f, 0.5f, 0.0f),
+			glm::vec3(0.5f, 0.5f, 0.0f),
 			glm::vec3(0.5f, -0.5f, 0.0f) 
 		}
 	);

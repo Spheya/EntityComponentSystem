@@ -19,17 +19,27 @@ namespace renderer {
 		~Vao();
 
 		VboHandle createVbo();
-
 		Vbo& getVbo(VboHandle handle);
 		const Vbo& getVbo(VboHandle handle) const;
 
-		void bind();
+		void setIndexBuffer(std::vector<GLuint> indices);
 
+		void bind();
 		void draw();
+
+		GLsizei getVertexCount();
+		void setVertexCount(GLsizei count);
+
+		GLenum getDrawMode();
+		void setDrawMode(GLenum mode);
 
 	private:
 		GLuint _vao;
+		GLuint _indexBuffer;
 		std::vector<Vbo> _vbos;
+
+		bool _usesIndexBuffer = false;
+
 		GLenum _mode;
 		GLsizei _vertexCount;
 	};

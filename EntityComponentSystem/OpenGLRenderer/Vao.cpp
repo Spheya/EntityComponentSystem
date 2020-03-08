@@ -45,10 +45,43 @@ const renderer::Vbo& renderer::Vao::getVbo(VboHandle handle) const {
 	return _vbos[handle];
 }
 
+void renderer::Vao::setIndexBuffer(std::vector<GLuint> indices) {
+	_vertexCount = indices.size();
+
+	glBindVertexArray(_vao);
+	if (_indexBuffer)
+		glGenBuffers(1, &_indexBuffer);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+
+	_usesIndexBuffer = true;
+}
+
 void renderer::Vao::bind() {
 	glBindVertexArray(_vao);
 }
 
 void renderer::Vao::draw() {
-	glDrawArrays(_mode, 0, _vertexCount);
+	if (!_usesIndexBuffer) {
+		glDrawArrays(_mode, 0, _vertexCount);
+	} else {
+		glDrawElements(_mode, _vertexCount, GL_UNSIGNED_INT, (void*) 0);
+	}
+}
+
+GLsizei renderer::Vao::getVertexCount() {
+	return _vertexCount;
+}
+
+void renderer::Vao::setVertexCount(GLsizei count) {
+	_vertexCount = count;
+}
+
+GLenum renderer::Vao::getDrawMode() {
+	return _mode;
+}
+
+void renderer::Vao::setDrawMode(GLenum mode) {
+	_mode = mode;
 }
