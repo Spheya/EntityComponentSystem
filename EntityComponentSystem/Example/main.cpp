@@ -22,7 +22,9 @@ int main() {
 
 	ecs::Engine ecsEngine;
 
-	ecsEngine.registerSystem(std::make_unique<renderer::ModelRenderSystem>());
+	auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>();
+
+	ecsEngine.registerSystem(modelRenderSystem);
 
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
 	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{

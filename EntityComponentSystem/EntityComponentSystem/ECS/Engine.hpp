@@ -35,10 +35,10 @@ namespace ecs {
 		void removeComponents(Entity& entity);
 
 		template<typename T, typename = typename std::enable_if<std::is_base_of<ISystem, T>::value, T>::type>
-		void registerSystem(std::unique_ptr<T> system);
+		void registerSystem(std::shared_ptr<T> system);
 
 		template<typename T, typename = typename std::enable_if<std::is_base_of<ISystem, T>::value, T>::type>
-		void registerSystem(std::unique_ptr<T> system, SystemDependencies dependencies);
+		void registerSystem(std::shared_ptr<T> system, SystemDependencies dependencies);
 
 		template<typename T, typename = typename std::enable_if<std::is_base_of<ISystem, T>::value, T>::type>
 		void unregisterSystem();
@@ -52,10 +52,10 @@ namespace ecs {
 
 	private:
 		struct SystemData {
-			SystemData(std::unique_ptr<ISystem> system, std::type_index type, SystemDependencies dependencies) :
+			SystemData(std::shared_ptr<ISystem> system, std::type_index type, SystemDependencies dependencies) :
 				system(std::move(system)), type(type), dependencies(std::move(dependencies))
 			{}
-			std::unique_ptr<ISystem> system;
+			std::shared_ptr<ISystem> system;
 			std::type_index type;
 			SystemDependencies dependencies;
 		};
@@ -154,12 +154,12 @@ namespace ecs {
 	}
 
 	template<typename T, typename>
-	inline void Engine::registerSystem(std::unique_ptr<T> system) {
+	inline void Engine::registerSystem(std::shared_ptr<T> system) {
 		registerSystem(std::move(system), SystemDependencies::create());
 	}
 
 	template<typename T, typename>
-	inline void Engine::registerSystem(std::unique_ptr<T> system, SystemDependencies dependencies) {
+	inline void Engine::registerSystem(std::shared_ptr<T> system, SystemDependencies dependencies) {
 		assert(!containsSystem<T>());
 		_systems.emplace_back(std::move(system), std::type_index(typeid(T)), std::move(dependencies));
 		_dirtySystemBatches = true;
