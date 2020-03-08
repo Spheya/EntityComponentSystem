@@ -3,6 +3,7 @@
 #include "System.hpp"
 #include "ComponentStorage.hpp"
 #include "SystemBatch.hpp"
+#include "SystemDependencies.hpp"
 
 #include <queue>
 
@@ -37,6 +38,9 @@ namespace ecs {
 		void registerSystem(std::unique_ptr<T> system);
 
 		template<typename T, typename = typename std::enable_if<std::is_base_of<ISystem, T>::value, T>::type>
+		void registerSystem(std::unique_ptr<T> system, SystemDependencies dependencies);
+
+		template<typename T, typename = typename std::enable_if<std::is_base_of<ISystem, T>::value, T>::type>
 		void unregisterSystem();
 
 		template<typename T>
@@ -47,15 +51,28 @@ namespace ecs {
 		void updateSystems(float deltatime, size_t nThreads);
 
 	private:
+		struct SystemData {
+			SystemData(std::unique_ptr<ISystem> system, std::type_index type, SystemDependencies dependencies) :
+				system(std::move(system)), type(type), dependencies(std::move(dependencies))
+			{}
+			std::unique_ptr<ISystem> system;
+			std::type_index type;
+			SystemDependencies dependencies;
+		};
+
 		std::vector<std::unique_ptr<Entity>> _entities;
 		std::queue<Entity::Handle> _freeEntitySpaces;
 
-		std::vector<std::pair<std::unique_ptr<ISystem>, std::type_index>> _systems;
+		std::vector<SystemData> _systems;
 		std::vector<SystemBatch> _systemBatches;
+		bool _dirtySystemBatches = false;
 
 		ComponentStorage _components;
 
 		void systemCheckEntity(Entity& entity);
+
+		void buildSystemBatches();
+		std::vector<SystemBatch>::iterator addSystemFrom(std::vector<SystemBatch>::iterator begin, ISystem* system);
 
 		template<typename First, typename Second, typename ... T>
 		void _addComponents(Entity& entity, const First& first, const Second& second, const T&... t);
@@ -138,17 +155,14 @@ namespace ecs {
 
 	template<typename T, typename>
 	inline void Engine::registerSystem(std::unique_ptr<T> system) {
+		registerSystem(std::move(system), SystemDependencies::create());
+	}
+
+	template<typename T, typename>
+	inline void Engine::registerSystem(std::unique_ptr<T> system, SystemDependencies dependencies) {
 		assert(!containsSystem<T>());
-		_systems.push_back(std::make_pair<std::unique_ptr<ISystem>, std::type_index>(std::move(system), std::type_index(typeid(T))));
-		
-		for (auto& batch : _systemBatches) {
-			if (batch.fitsSystem(_systems.back().first.get())) {
-				batch.addSystem(_systems.back().first.get());
-				return;
-			}
-		}
-		_systemBatches.emplace_back();
-		_systemBatches.back().addSystem(_systems.back().first.get());
+		_systems.emplace_back(std::move(system), std::type_index(typeid(T)), std::move(dependencies));
+		_dirtySystemBatches = true;
 	}
 
 	template<typename T, typename>
@@ -173,7 +187,7 @@ namespace ecs {
 		const auto id = std::type_index(typeid(T));
 
 		for (const auto& system : _systems)
-			if (id == system.second)
+			if (id == system.type)
 				return true;
 		return false;
 	}
@@ -201,6 +215,9 @@ namespace ecs {
 	}
 
 	inline void Engine::updateSystems(float deltatime) {
+		if (_dirtySystemBatches)
+			buildSystemBatches();
+
 		ChangeBuffer buffer;
 
 		for (auto& systemBatch : _systemBatches) {
@@ -246,13 +263,85 @@ namespace ecs {
 
 	inline void Engine::systemCheckEntity(Entity& entity) {
 		for (auto& system : _systems) {
-			if (system.first->fitsEntity(entity)) {
-				if (!system.first->containsEntity(entity))
-					system.first->addEntity(entity);
+			if (system.system->fitsEntity(entity)) {
+				if (!system.system->containsEntity(entity))
+					system.system->addEntity(entity);
 			}else{
-				if (system.first->containsEntity(entity))
-					system.first->removeEntity(entity);
+				if (system.system->containsEntity(entity))
+					system.system->removeEntity(entity);
 			}
 		}
+	}
+
+	inline void Engine::buildSystemBatches() {
+		// Start with a clean slate
+		_systemBatches.clear();
+
+		// Create a list of all systems which need to be added
+		std::unordered_map<std::type_index, SystemData*> systemsToBeAdded;
+		systemsToBeAdded.reserve(_systems.size());
+		for (auto& system : _systems)
+			systemsToBeAdded.emplace(system.type, &system);
+
+		// Create a structure of systems which have dependencies
+		std::unordered_map<std::type_index, std::pair<SystemData*, bool>> dependentSystems;
+		for (auto system : systemsToBeAdded)
+			if (!system.second->dependencies.empty())
+				dependentSystems.emplace(system.first, std::make_pair(system.second, true));
+
+		// Check which of the systems are on top of the dependency hierarchy
+		for (const auto& system : dependentSystems) {
+			for (const auto dep : system.second.first->dependencies.getDependencies()) {
+				auto it = dependentSystems.find(dep);
+				if(it != dependentSystems.end())
+					it->second.second = false;
+			}
+		}
+
+		// Create a queue of dependent systems to be added to the batches
+		std::queue<std::pair<SystemData*, std::vector<SystemBatch>::iterator>> processQueue;
+		for (const auto& system : dependentSystems) {
+			if (system.second.second) {
+				processQueue.emplace(system.second.first, _systemBatches.begin());
+				systemsToBeAdded.erase(system.first);
+			}
+		}
+
+		// Add the dependent systems to the batches
+		while (!processQueue.empty()) {
+			auto& system = processQueue.front();
+
+			auto it = addSystemFrom(system.second, system.first->system.get());
+			for (const auto dep : system.first->dependencies.getDependencies()) {
+				auto newSystem = systemsToBeAdded.find(dep);
+				if (newSystem != systemsToBeAdded.end()) {
+					processQueue.emplace(newSystem->second, it);
+					systemsToBeAdded.erase(newSystem);
+				}
+			}
+
+			processQueue.pop();
+		}
+
+		// The dependencies are reversed, so let's reverse the batches
+		std::reverse(_systemBatches.begin(), _systemBatches.end());
+
+		// Add the remaining systems
+		for (auto& system : systemsToBeAdded)
+			addSystemFrom(_systemBatches.begin(), system.second->system.get());
+
+		_dirtySystemBatches = false;
+	}
+
+	inline std::vector<SystemBatch>::iterator Engine::addSystemFrom(std::vector<SystemBatch>::iterator begin, ISystem* system) {
+		for (auto it = begin; it != _systemBatches.end(); ++it) {
+			if (it->fitsSystem(system)) {
+				it->addSystem(system);
+				return it;
+			}
+		}
+		_systemBatches.emplace_back();
+		_systemBatches.back().addSystem(system);
+		return _systemBatches.end() - 1;
 	}
 }

@@ -28,6 +28,7 @@
     <ClInclude Include="ECS\MemoryPoolAllocator.hpp" />
     <ClInclude Include="ECS\System.hpp" />
     <ClInclude Include="ECS\SystemBatch.hpp" />
+    <ClInclude Include="ECS\SystemDependencies.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -42,5 +42,8 @@
     <ClInclude Include="ECS\SystemBatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\SystemDependencies.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
