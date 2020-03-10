@@ -49,7 +49,7 @@ void renderer::Vao::setIndexBuffer(std::vector<GLuint> indices) {
 	_vertexCount = indices.size();
 
 	glBindVertexArray(_vao);
-	if (_indexBuffer)
+	if (!_indexBuffer)
 		glGenBuffers(1, &_indexBuffer);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);

@@ -122,7 +122,7 @@ int main() {
 
 		camera.processDebugMovement(*window.getInput(), window.getDeltaTime());
 		
-		//light.position = glm::vec3(sin(time) * 8, 1.0f, -4.0f + cos(time) * 4.0f);
+		light.position = glm::vec3(sin(time) * 8, 1.0f, -4.0f + cos(time) * 4.0f);
 
 		modelRenderSystem->updateCamera(camera);
 

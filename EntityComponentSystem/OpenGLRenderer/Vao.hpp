@@ -35,7 +35,7 @@ namespace renderer {
 
 	private:
 		GLuint _vao;
-		GLuint _indexBuffer;
+		GLuint _indexBuffer = 0;
 		std::vector<Vbo> _vbos;
 
 		bool _usesIndexBuffer = false;
