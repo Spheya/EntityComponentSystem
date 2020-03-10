@@ -122,5 +122,11 @@
     <ClInclude Include="ShaderProgram.hpp">
       <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="DirectionalLightSource.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereLightSource.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

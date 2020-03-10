@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{f594bd5e-134b-4977-8e18-b2acf9b8a09d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,12 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\default.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\default.vert">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="res\doof.obj">
       <Filter>Resource Files</Filter>
     </None>
@@ -38,9 +35,21 @@
     <None Include="res\sphere.obj">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\pbr.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\pbr.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="pbrShading.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\floorTexture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\white.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

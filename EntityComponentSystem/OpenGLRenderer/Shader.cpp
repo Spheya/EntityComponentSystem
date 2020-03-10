@@ -80,6 +80,8 @@ void renderer::Shader::loadFromFile(const std::string& filename) {
 	const std::string defaultShader = ShaderPreprocessor::process(filename, false);
 	const std::string instancedShader = ShaderPreprocessor::process(filename, true);
 	
+	std::cout << defaultShader << std::endl << std::endl << std::endl;
+
 	// Compile the code
 	_id = loadFromString(defaultShader, _type);
 	_instancedId = loadFromString(instancedShader, _type);

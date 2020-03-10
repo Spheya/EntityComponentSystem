@@ -169,15 +169,17 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\default.frag" />
-    <None Include="res\default.vert" />
+    <None Include="res\pbr.frag" />
+    <None Include="res\pbr.vert" />
     <None Include="res\doof.obj" />
     <None Include="res\dragon.obj" />
     <None Include="res\monki.obj" />
     <None Include="res\sphere.obj" />
+    <None Include="pbrShading.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\floorTexture.png" />
+    <Image Include="res\white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,9 +24,6 @@ namespace renderer {
 		void addToInstancedVector(std::vector<uint8_t>& vec, const std::vector<std::string> order);
 
 		template<typename T>
-		void store(const std::string& name, T&& value);
-
-		template<typename T>
 		void store(const std::string& name, const T& value);
 	private:
 		std::unordered_map<std::string, std::unique_ptr<IUniform>> _uniforms;
@@ -43,20 +40,8 @@ namespace renderer {
 	}
 
 	template<typename T>
-	inline void InstanceData::store(const std::string& name, T&& value) {
-		auto data = dynamic_cast<Uniform<T>*>(_uniforms[name].get());
-		if (!data) {
-			auto ptr = std::make_unique<Uniform<T>>();
-			data = ptr.get();
-			_uniforms[name] = std::move(ptr);
-		}
-
-		data->data = std::move(value);
-	}
-
-	template<typename T>
 	inline void InstanceData::store(const std::string& name, const T& value) {
-		auto data = dynamic_cast<Uniform<T>*>(_uniforms[name].get());
+		auto data = reinterpret_cast<Uniform<T>*>(_uniforms[name].get());
 		if (!data) {
 			auto ptr = std::make_unique<Uniform<T>>();
 			data = ptr.get();

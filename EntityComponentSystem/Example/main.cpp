@@ -31,8 +31,8 @@ int main() {
 	// Load the shader
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
 	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{
-		std::make_shared<renderer::Shader>("res/default.vert", GL_VERTEX_SHADER),
-			std::make_shared<renderer::Shader>("res/default.frag", GL_FRAGMENT_SHADER)
+		std::make_shared<renderer::Shader>("res/pbr.vert", GL_VERTEX_SHADER),
+			std::make_shared<renderer::Shader>("res/pbr.frag", GL_FRAGMENT_SHADER)
 		},
 		std::vector<std::pair<std::string, GLuint>> {
 			{"position", 0},
@@ -41,18 +41,25 @@ int main() {
 		}
 	);
 	shader->addEnable(GL_DEPTH_TEST);
+	shader->addEnable(GL_CULL_FACE);
 
 	// Load textures
 	auto floorTexture = std::make_shared<renderer::Texture>();
 	floorTexture->loadFromFile("res/floorTexture.png", GL_NEAREST);
 
+	auto whiteTexture = std::make_shared<renderer::Texture>();
+	whiteTexture->loadFromFile("res/white.png");
+
 	std::shared_ptr<renderer::TexturePack> floorTexturePack = std::make_shared<renderer::TexturePack>();
 	const auto floorTextureId = floorTexturePack->add(floorTexture);
+
+	std::shared_ptr<renderer::TexturePack> whiteTexturePack = std::make_shared<renderer::TexturePack>();
+	const auto whiteTextureId = whiteTexturePack->add(whiteTexture);
 
 	// Load models
 	float floorSize = 40;
 	auto floorModel = std::make_shared<renderer::Model>(
-		std::vector<GLuint>{ 0, 1, 2, 3, 2, 0 },
+		std::vector<GLuint>{ 0, 2, 1, 3, 2, 0 },
 		std::vector<glm::vec3>{
 			glm::vec3(-0.5f, 0.0f, +0.5f),
 			glm::vec3(-0.5f, 0.0f, -0.5f),
@@ -73,7 +80,7 @@ int main() {
 		}
 	);
 
-	auto testModel = std::make_shared<renderer::Model>("res/monki.obj");
+	auto testModel = std::make_shared<renderer::Model>("res/doof.obj");
 
 	// Create entities
 	for (int i = 0; i < 10; ++i) {
@@ -82,7 +89,7 @@ int main() {
 			Transform(glm::vec3(i * 1.5f - 5.0f * 1.5f, -1.0f, -4.0f), glm::vec3(), glm::vec3(0.5f)),
 			testModel,
 			shader,
-			floorTexturePack
+			whiteTexturePack
 		));
 	}
 
@@ -97,13 +104,26 @@ int main() {
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setScale(glm::vec3(floorSize));
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setPosition(glm::vec3(0.0f, -1.7f, 0.0f));
 
+	// Create light sources
+	renderer::DirectionalLightSource sun(glm::vec3(0.2f, -1.0f, 0.3f), glm::vec3(1.0f), 0.7f);
+	renderer::SphereLightSource light(glm::vec3(0.0f, 2.0f, -3.0f), 0.3f, glm::vec3(1.0f, 0.7f, 0.9f), 120.0f);
+
+	modelRenderSystem->addLightSource(&sun);
+	modelRenderSystem->addLightSource(&light);
+
 	// Setup the camera
 	renderer::Camera camera(0.1f, 100.0f, 70.0f);
 	window.getInput()->enableLockedMouse();
 
 	// Gameloop
+	float time = 0.0f;
 	while (!window.isCloseRequested()) {
+		time += window.getDeltaTime();
+
 		camera.processDebugMovement(*window.getInput(), window.getDeltaTime());
+		
+		//light.position = glm::vec3(sin(time) * 8, 1.0f, -4.0f + cos(time) * 4.0f);
+
 		modelRenderSystem->updateCamera(camera);
 
 		ecsEngine.updateSystems(window.getDeltaTime());

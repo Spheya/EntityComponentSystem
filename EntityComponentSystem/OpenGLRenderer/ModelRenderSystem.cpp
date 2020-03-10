@@ -3,6 +3,8 @@
 void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityData>& entityGroup, ecs::ChangeBuffer&) {
 	std::unordered_map<GLenum, bool> enabled;
 
+	updateLightSourceInfo();
+
 	for (auto& entity : entityGroup) {
 		auto* renderComponent = entity.getComponent<ModelRenderComponent>();
 
@@ -50,4 +52,36 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 void renderer::ModelRenderSystem::updateCamera(const Camera& camera) {
 	_globalInstanceData.store("projectionMatrix", camera.getProjectionMatrix(*_window));
 	_globalInstanceData.store("viewMatrix", camera.getViewMatrix());
+	_globalInstanceData.store("cameraPosition", camera.getTransform().getPosition());
+}
+
+void renderer::ModelRenderSystem::addLightSource(DirectionalLightSource* light) {
+	_directionalLights.push_back(light);
+}
+
+void renderer::ModelRenderSystem::addLightSource(SphereLightSource* light) {
+	_sphericalLights.push_back(light);
+}
+
+void renderer::ModelRenderSystem::removeLightSource(DirectionalLightSource* light) {
+	_directionalLights.erase(std::remove(_directionalLights.begin(), _directionalLights.end(), light), _directionalLights.end());
+}
+
+void renderer::ModelRenderSystem::removeLightSource(SphereLightSource* light) {
+	_sphericalLights.erase(std::remove(_sphericalLights.begin(), _sphericalLights.end(), light), _sphericalLights.end());
+}
+
+void renderer::ModelRenderSystem::updateLightSourceInfo() {
+	for (size_t i = 0; i < _directionalLights.size(); ++i) {
+		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].direction", _directionalLights[i]->direction);
+		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].colour", _directionalLights[i]->colour);
+		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].intensity", _directionalLights[i]->intensity);
+	}
+
+	for (size_t i = 0; i < _sphericalLights.size(); ++i) {
+		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].position", _sphericalLights[i]->position);
+		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].radius", _sphericalLights[i]->radius);
+		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].colour", _sphericalLights[i]->colour);
+		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].intensity", _sphericalLights[i]->intensity);
+	}
 }

@@ -4,6 +4,8 @@
 
 #include "ModelRenderComponent.hpp"
 #include "Camera.hpp"
+#include "DirectionalLightSource.hpp"
+#include "SphereLightSource.hpp"
 
 namespace renderer {
 	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {
@@ -14,9 +16,19 @@ namespace renderer {
 
 		void updateCamera(const Camera& camera);
 
+		void addLightSource(DirectionalLightSource* light);
+		void addLightSource(SphereLightSource* light);
+
+		void removeLightSource(DirectionalLightSource* light);
+		void removeLightSource(SphereLightSource* light);
+
 	private:
 		InstanceData _globalInstanceData;
 		Window* _window;
+
+		std::vector<DirectionalLightSource*> _directionalLights;
+		std::vector<SphereLightSource*> _sphericalLights;
 		
+		void updateLightSourceInfo();
 	};
 }
