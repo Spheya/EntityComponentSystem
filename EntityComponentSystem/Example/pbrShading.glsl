@@ -4,7 +4,7 @@ struct DirectionalLight {
   float intensity; // Intensity of the light in lux
 };
 
-struct SphericalLight {
+struct PointLight {
   vec3 position;   // The position of the light
   float radius;    // Radius of the light in meter
   vec3 colour;     // Colour of the light
@@ -70,7 +70,7 @@ vec3 calcLight(DirectionalLight light, Material material, vec3 position, vec3 no
   return light.intensity * light.colour * GGX(material, toCameraDirection, toLightDirection, position, normal);
 }
 
-vec3 calcLight(SphericalLight light, Material material, vec3 position, vec3 normal, vec3 toCamera) {
+vec3 calcLight(PointLight light, Material material, vec3 position, vec3 normal, vec3 toCamera) {
   vec3 toLight = light.position - position;
   vec3 toCameraDirection = normalize(toCamera);
   vec3 toLightDirection = normalize(toLight);

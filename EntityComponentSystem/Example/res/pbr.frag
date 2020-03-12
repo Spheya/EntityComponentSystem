@@ -13,7 +13,7 @@ uniform sampler2D normal;
 
 uniform vec3 cameraPosition;
 
-uniform SphericalLight sphericalLights[8];
+uniform PointLight pointLights[8];
 uniform DirectionalLight directionalLights[8];
 
 out vec4 fragColour;
@@ -31,7 +31,7 @@ void main(){
 
 	for(int i = 0; i < 8; ++i) {
 		colour += calcLight(directionalLights[i], mat, p, n, toCamera) * directionalLights[i].colour;
-		colour += calcLight(sphericalLights[i], mat, p, n, toCamera);
+		colour += calcLight(pointLights[i], mat, p, n, toCamera);
 	}
 
 	colour = colour / (colour + vec3(1.0));

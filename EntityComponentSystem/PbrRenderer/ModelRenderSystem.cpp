@@ -61,29 +61,28 @@ void renderer::ModelRenderSystem::addLightSource(DirectionalLightSource* light) 
 	_directionalLights.push_back(light);
 }
 
-void renderer::ModelRenderSystem::addLightSource(SphereLightSource* light) {
-	_sphericalLights.push_back(light);
+void renderer::ModelRenderSystem::addLightSource(PointLightSource* light) {
+	_pointLights.push_back(light);
 }
 
 void renderer::ModelRenderSystem::removeLightSource(DirectionalLightSource* light) {
 	_directionalLights.erase(std::remove(_directionalLights.begin(), _directionalLights.end(), light), _directionalLights.end());
 }
 
-void renderer::ModelRenderSystem::removeLightSource(SphereLightSource* light) {
-	_sphericalLights.erase(std::remove(_sphericalLights.begin(), _sphericalLights.end(), light), _sphericalLights.end());
+void renderer::ModelRenderSystem::removeLightSource(PointLightSource* light) {
+	_pointLights.erase(std::remove(_pointLights.begin(), _pointLights.end(), light), _pointLights.end());
 }
 
 void renderer::ModelRenderSystem::updateLightSourceInfo() {
 	for (size_t i = 0; i < _directionalLights.size(); ++i) {
 		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].direction", _directionalLights[i]->direction);
-		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].colour", _directionalLights[i]->colour);
+		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].colour",    _directionalLights[i]->colour);
 		_globalInstanceData.store("directionalLights[" + std::to_string(i) + "].intensity", _directionalLights[i]->intensity);
 	}
 
-	for (size_t i = 0; i < _sphericalLights.size(); ++i) {
-		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].position", _sphericalLights[i]->position);
-		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].radius", _sphericalLights[i]->radius);
-		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].colour", _sphericalLights[i]->colour);
-		_globalInstanceData.store("sphericalLights[" + std::to_string(i) + "].intensity", _sphericalLights[i]->intensity);
+	for (size_t i = 0; i < _pointLights.size(); ++i) {
+		_globalInstanceData.store("pointLights[" + std::to_string(i) + "].position",  _pointLights[i]->position);
+		_globalInstanceData.store("pointLights[" + std::to_string(i) + "].colour",    _pointLights[i]->colour);
+		_globalInstanceData.store("pointLights[" + std::to_string(i) + "].intensity", _pointLights[i]->intensity);
 	}
 }

@@ -57,7 +57,7 @@ int main() {
 	metalRoughness->loadFromFile("res/metal_roughness.jpg");
 	metalNormal->loadFromFile("res/metal_normal.jpg");
 
-	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 1.0f, 0.0f));
+	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 0.0f, 1.0f));
 	std::shared_ptr<renderer::Material> metalMaterial = std::make_shared<renderer::Material>(
 		metalBaseColour, metalMetalness, metalRoughness, metalNormal
 	);
@@ -113,8 +113,8 @@ int main() {
 
 	// Create light sources
 	renderer::DirectionalLightSource sun(glm::vec3(0.2f, -1.0f, -0.5f), glm::vec3(0.95f, 0.90f, 1.0f), 0.5f);
-	renderer::SphereLightSource light(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), 0.6f, glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
-	renderer::SphereLightSource light2(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), 0.6f, glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
+	renderer::PointLightSource light(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
+	renderer::PointLightSource light2(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
 
 	modelRenderSystem->addLightSource(&sun);
 	modelRenderSystem->addLightSource(&light);

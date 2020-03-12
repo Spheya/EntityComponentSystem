@@ -45,7 +45,7 @@
     <ClInclude Include="ModelRenderComponent.hpp" />
     <ClInclude Include="ModelRenderSystem.hpp" />
     <ClInclude Include="ShaderPreprocessor.hpp" />
-    <ClInclude Include="SphereLightSource.hpp" />
+    <ClInclude Include="PointLightSource.hpp" />
     <ClInclude Include="Vao.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="ShaderProgram.hpp" />
