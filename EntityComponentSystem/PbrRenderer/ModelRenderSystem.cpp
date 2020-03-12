@@ -9,18 +9,18 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		auto* renderComponent = entity.getComponent<ModelRenderComponent>();
 
 		// Bind the shader
-		renderComponent->shader->bind();
-		_globalInstanceData.bindUniforms(*renderComponent->shader);
+		_shader->bind();
+		_globalInstanceData.bindUniforms(*_shader);
 
 		// Enable and disable shader specific GL capabilities
-		for (GLenum enable : renderComponent->shader->getEnables()) {
+		for (GLenum enable : _shader->getEnables()) {
 			bool& val = enabled[enable];
 			if (!val) {
 				glEnable(enable);
 				val = true;
 			}
 		}
-		for (GLenum disable : renderComponent->shader->getDisables()) {
+		for (GLenum disable : _shader->getDisables()) {
 			bool& val = enabled[disable];
 			if (val) {
 				glDisable(disable);
@@ -29,7 +29,7 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		}
 
 		// Dispatch some shader specific opengl calls
-		renderComponent->shader->dispatchPreparation();
+		_shader->dispatchPreparation();
 
 		// Bind the textures
 		renderComponent->material->baseColour.getTexture()->bind(0);
@@ -38,8 +38,7 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		renderComponent->material->normal.getTexture()->bind(3);
 
 		// Bind the uniforms
-		renderComponent->instanceData.store("modelMatrix", renderComponent->transform.getMatrix());
-		renderComponent->instanceData.bindUniforms(*renderComponent->shader);
+		glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &renderComponent->transform.getMatrix()[0][0]);
 
 		// Draw the mesh
 		auto& vao = renderComponent->model->getVao();
@@ -47,7 +46,7 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		vao.draw();
 
 		// Dispatch some shader specific opengl calls for cleanup
-		renderComponent->shader->dispatchCleanup();
+		_shader->dispatchCleanup();
 	}
 }
 

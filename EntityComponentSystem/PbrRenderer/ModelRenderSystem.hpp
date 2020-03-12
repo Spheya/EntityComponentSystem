@@ -10,7 +10,9 @@
 namespace renderer {
 	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {
 	public:
-		ModelRenderSystem(Window* window) : Base(ecs::SystemThreadingMode::MAIN_THREAD), _window(window) {
+		ModelRenderSystem(Window* window, std::shared_ptr<ShaderProgram> pbrShader) :
+			Base(ecs::SystemThreadingMode::MAIN_THREAD), _shader(pbrShader), _window(window)
+		{
 			_globalInstanceData.store("baseColour", 0);
 			_globalInstanceData.store("metalness", 1);
 			_globalInstanceData.store("roughness", 2);
@@ -28,6 +30,7 @@ namespace renderer {
 		void removeLightSource(PointLightSource* light);
 
 	private:
+		std::shared_ptr<ShaderProgram> _shader;
 		InstanceData _globalInstanceData;
 		Window* _window;
 

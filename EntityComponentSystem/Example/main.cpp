@@ -22,12 +22,6 @@ int main() {
 	window.makeCurrentContext();
 	window.enableVsync(false);
 
-	// Setup ecs
-	ecs::Engine ecsEngine;
-
-	const auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window);
-	ecsEngine.registerSystem(modelRenderSystem);
-
 	// Load the shader
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
 	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{
@@ -42,6 +36,12 @@ int main() {
 	);
 	shader->addEnable(GL_DEPTH_TEST);
 	shader->addEnable(GL_CULL_FACE);
+
+	// Setup ecs
+	ecs::Engine ecsEngine;
+
+	const auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window, shader);
+	ecsEngine.registerSystem(modelRenderSystem);
 
 	// Load textures
 	auto floorTexture = std::make_shared<renderer::Texture>();
@@ -95,7 +95,6 @@ int main() {
 			ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
 				Transform(glm::vec3(x * 1.5f - 5.0f * 1.5f, -1.0f + y * 1.5f, -4.0f), glm::vec3(), glm::vec3(0.75f)),
 				testModel,
-				shader,
 				metalMaterial
 			));
 		}
@@ -105,7 +104,6 @@ int main() {
 	ecsEngine.addComponent(floorEntity, renderer::ModelRenderComponent(
 		Transform(),
 		floorModel,
-		shader,
 		floorMaterial
 	));
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setScale(glm::vec3(floorSize));
