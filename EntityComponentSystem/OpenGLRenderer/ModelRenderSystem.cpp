@@ -32,8 +32,10 @@ void renderer::ModelRenderSystem::onUpdate(float, const ecs::EntityGroup<EntityD
 		renderComponent->shader->dispatchPreparation();
 
 		// Bind the textures
-		if (renderComponent->textures)
-			renderComponent->textures->bind();
+		renderComponent->material->baseColour.getTexture()->bind(0);
+		renderComponent->material->metalness.getTexture()->bind(1);
+		renderComponent->material->roughness.getTexture()->bind(2);
+		renderComponent->material->normal.getTexture()->bind(3);
 
 		// Bind the uniforms
 		renderComponent->instanceData.store("modelMatrix", renderComponent->transform.getMatrix());

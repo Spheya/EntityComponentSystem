@@ -75,6 +75,9 @@
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlfwGuard.hpp">
@@ -126,6 +129,9 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="SphereLightSource.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

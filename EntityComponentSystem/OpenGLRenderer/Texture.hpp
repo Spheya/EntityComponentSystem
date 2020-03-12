@@ -17,8 +17,8 @@ namespace renderer {
 		~Texture();
 
 		void loadFromFile(const std::string& fileName, GLenum filter = GL_LINEAR);
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height, GLenum filter);
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth, GLenum filter);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height, GLenum filter = GL_LINEAR);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth, GLenum filter = GL_LINEAR);
 
 		void bind(unsigned slot) const;
 		void unbind(unsigned slot) const;

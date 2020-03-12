@@ -10,7 +10,12 @@
 namespace renderer {
 	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {
 	public:
-		ModelRenderSystem(Window* window) : Base(ecs::SystemThreadingMode::MAIN_THREAD), _window(window) {}
+		ModelRenderSystem(Window* window) : Base(ecs::SystemThreadingMode::MAIN_THREAD), _window(window) {
+			_globalInstanceData.store("baseColour", 0);
+			_globalInstanceData.store("metalness", 1);
+			_globalInstanceData.store("roughness", 2);
+			_globalInstanceData.store("normal", 3);
+		}
 
 		void onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&);
 

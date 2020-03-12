@@ -47,17 +47,23 @@ int main() {
 	auto floorTexture = std::make_shared<renderer::Texture>();
 	floorTexture->loadFromFile("res/floorTexture.png", GL_NEAREST);
 
-	auto whiteTexture = std::make_shared<renderer::Texture>();
-	whiteTexture->loadFromFile("res/white.png");
+	auto metalBaseColour = std::make_shared<renderer::Texture>();
+	auto metalMetalness = std::make_shared<renderer::Texture>();
+	auto metalRoughness = std::make_shared<renderer::Texture>();
+	auto metalNormal = std::make_shared<renderer::Texture>();
 
-	std::shared_ptr<renderer::TexturePack> floorTexturePack = std::make_shared<renderer::TexturePack>();
-	const auto floorTextureId = floorTexturePack->add(floorTexture);
+	metalBaseColour->loadFromFile("res/metal_basecolour.jpg");
+	metalMetalness->loadFromFile("res/metal_metalness.jpg");
+	metalRoughness->loadFromFile("res/metal_roughness.jpg");
+	metalNormal->loadFromFile("res/metal_normal.jpg");
 
-	std::shared_ptr<renderer::TexturePack> whiteTexturePack = std::make_shared<renderer::TexturePack>();
-	const auto whiteTextureId = whiteTexturePack->add(whiteTexture);
+	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 1.0f, 0.0f));
+	std::shared_ptr<renderer::Material> metalMaterial = std::make_shared<renderer::Material>(
+		metalBaseColour, metalMetalness, metalRoughness, metalNormal
+	);
 
 	// Load models
-	float floorSize = 40;
+	float floorSize = 4000;
 	auto floorModel = std::make_shared<renderer::Model>(
 		std::vector<GLuint>{ 0, 2, 1, 3, 2, 0 },
 		std::vector<glm::vec3>{
@@ -80,17 +86,19 @@ int main() {
 		}
 	);
 
-	auto testModel = std::make_shared<renderer::Model>("res/doof.obj");
+	auto testModel = std::make_shared<renderer::Model>("res/sphere.obj");
 
 	// Create entities
-	for (int i = 0; i < 10; ++i) {
-		auto& entity = ecsEngine.createEntity();
-		ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
-			Transform(glm::vec3(i * 1.5f - 5.0f * 1.5f, -1.0f, -4.0f), glm::vec3(), glm::vec3(0.5f)),
-			testModel,
-			shader,
-			whiteTexturePack
-		));
+	for (int x = 0; x < 20; ++x) {
+		for (int y = 0; y < 1; ++y) {
+			auto& entity = ecsEngine.createEntity();
+			ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
+				Transform(glm::vec3(x * 1.5f - 5.0f * 1.5f, -1.0f + y * 1.5f, -4.0f), glm::vec3(), glm::vec3(0.75f)),
+				testModel,
+				shader,
+				metalMaterial
+			));
+		}
 	}
 
 	auto& floorEntity = ecsEngine.createEntity();
@@ -98,18 +106,19 @@ int main() {
 		Transform(),
 		floorModel,
 		shader,
-		floorTexturePack
+		floorMaterial
 	));
-	floorEntity.getComponent<renderer::ModelRenderComponent>()->instanceData.store("tex", (int)floorTextureId);
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setScale(glm::vec3(floorSize));
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setPosition(glm::vec3(0.0f, -1.7f, 0.0f));
 
 	// Create light sources
-	renderer::DirectionalLightSource sun(glm::vec3(0.2f, -1.0f, 0.3f), glm::vec3(1.0f), 0.7f);
-	renderer::SphereLightSource light(glm::vec3(0.0f, 2.0f, -3.0f), 0.3f, glm::vec3(1.0f, 0.7f, 0.9f), 120.0f);
+	renderer::DirectionalLightSource sun(glm::vec3(0.2f, -1.0f, -0.5f), glm::vec3(0.95f, 0.90f, 1.0f), 0.5f);
+	renderer::SphereLightSource light(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), 0.6f, glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
+	renderer::SphereLightSource light2(glm::vec3(0.0f, 2.0f, 5.0f * 1.5f), 0.6f, glm::vec3(1.0f, 0.2f, 0.9f), 500.0f);
 
 	modelRenderSystem->addLightSource(&sun);
 	modelRenderSystem->addLightSource(&light);
+	modelRenderSystem->addLightSource(&light2);
 
 	// Setup the camera
 	renderer::Camera camera(0.1f, 100.0f, 70.0f);
@@ -122,7 +131,15 @@ int main() {
 
 		camera.processDebugMovement(*window.getInput(), window.getDeltaTime());
 		
-		light.position = glm::vec3(sin(time) * 8, 1.0f, -4.0f + cos(time) * 4.0f);
+		if (window.getInput()->isMouseButtonDown(GLFW_MOUSE_BUTTON_1))
+			light.position = camera.getTransform().getPosition();
+
+		if (window.getInput()->isMouseButtonDown(GLFW_MOUSE_BUTTON_2))
+			light2.position = camera.getTransform().getPosition();
+
+		//light.position = glm::vec3(sin(time) * 8, -1.7f + light.radius, -4.0f + cos(time) * 4.0f);
+		//light2.position = glm::vec3(-sin(time) * 8, -1.7f + light.radius, -4.0f - cos(time) * 4.0f);
+		//light.position = camera.getTransform().getPosition();
 
 		modelRenderSystem->updateCamera(camera);
 

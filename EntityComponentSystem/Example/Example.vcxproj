@@ -179,6 +179,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\floorTexture.png" />
+    <Image Include="res\metal_basecolour.jpg" />
+    <Image Include="res\metal_metalness.jpg" />
+    <Image Include="res\metal_normal.jpg" />
+    <Image Include="res\metal_roughness.jpg" />
     <Image Include="res\white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

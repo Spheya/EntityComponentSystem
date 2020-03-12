@@ -4,6 +4,7 @@
 #include <memory>
 
 namespace renderer {
+	// Not used anymore, but might come in handy later on
 	class TexturePack {
 	public:
 		TexturePack() = default;

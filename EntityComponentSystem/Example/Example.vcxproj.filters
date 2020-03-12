@@ -52,5 +52,17 @@
     <Image Include="res\white.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\metal_basecolour.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\metal_metalness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\metal_normal.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\metal_roughness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

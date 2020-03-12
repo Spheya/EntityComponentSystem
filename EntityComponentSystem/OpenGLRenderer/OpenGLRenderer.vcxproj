@@ -22,6 +22,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlfwGuard.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelRenderSystem.cpp" />
     <ClCompile Include="ShaderPreprocessor.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="DirectionalLightSource.hpp" />
     <ClInclude Include="GlfwGuard.hpp" />
     <ClInclude Include="Input.hpp" />
+    <ClInclude Include="Material.hpp" />
     <ClInclude Include="Model.hpp" />
     <ClInclude Include="ModelRenderComponent.hpp" />
     <ClInclude Include="ModelRenderSystem.hpp" />
