@@ -4,13 +4,24 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 namespace {
-	std::string processFile(std::string shaderFile, std::string path, std::unordered_map<std::string, bool>& includedFiles) {
+	std::string processFile(std::string shaderFile, std::unordered_map<std::string, bool>& includedFiles) {
 		// Get the absolute path to this file
-		std::filesystem::path p = path;
+		std::filesystem::path p = shaderFile;
 		std::string absolutePath = std::filesystem::absolute(p).u8string();
 		
+#ifdef _DEBUG
+		{
+			std::ifstream f(absolutePath);
+			if (!f.good()) {
+				std::cout << "shader file \"" << absolutePath << "\" not found!" << std::endl;
+				std::terminate();
+			}
+		}
+#endif
+
 		// If the file is already included, do nothing
 		if (includedFiles[absolutePath])
 			return "";
@@ -30,7 +41,7 @@ namespace {
 			if (statement == "#include") {
 				iss >> statement;
 				std::string relativeFilePath = statement.substr(1, statement.size() - 2);
-				processedCode << processFile(relativeFilePath, absolutePath + relativeFilePath, includedFiles);
+				processedCode << processFile(p.parent_path().u8string() + '\\' + relativeFilePath, includedFiles);
 			} else {
 				processedCode << line;
 				processedCode << '\n';
@@ -44,5 +55,5 @@ namespace {
 std::string renderer::ShaderPreprocessor::process(std::string shaderFile) {
 	std::unordered_map<std::string, bool> includedFiles;
 
-	return processFile(shaderFile, std::filesystem::current_path().u8string() + shaderFile, includedFiles);
+	return processFile(shaderFile, includedFiles);
 }

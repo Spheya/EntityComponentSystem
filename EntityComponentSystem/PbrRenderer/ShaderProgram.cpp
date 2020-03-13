@@ -78,10 +78,6 @@ void renderer::ShaderProgram::bind() const {
 	glUseProgram(_program);
 }
 
-void renderer::ShaderProgram::bindInstanced() const {
-	glUseProgram(_instancedProgram);
-}
-
 void renderer::ShaderProgram::bindDefaultShader() {
 	glUseProgram(0);
 }
@@ -96,28 +92,16 @@ void renderer::ShaderProgram::dispatchCleanup() const {
 		(*_cleanupFunction)();
 }
 
-GLint renderer::ShaderProgram::getUniformLocation(const std::string& uniform, bool instanced) {
-	if (!instanced) {
-		auto it = _uniforms.find(uniform);
+GLint renderer::ShaderProgram::getUniformLocation(const std::string& uniform) {
+	auto it = _uniforms.find(uniform);
 
-		if (it == _uniforms.end()) {
-			GLint location = glGetUniformLocation(_program, uniform.c_str());
-			_uniforms.emplace(uniform, location);
-			return location;
-		}
-
-		return it->second;
-	} else {
-		auto it = _instancedUniforms.find(uniform);
-
-		if (it == _instancedUniforms.end()) {
-			GLint location = glGetUniformLocation(_program, uniform.c_str());
-			_instancedUniforms.emplace(uniform, location);
-			return location;
-		}
-
-		return it->second;
+	if (it == _uniforms.end()) {
+		GLint location = glGetUniformLocation(_program, uniform.c_str());
+		_uniforms.emplace(uniform, location);
+		return location;
 	}
+
+	return it->second;
 }
 
 void renderer::ShaderProgram::addPreparationFunction(std::unique_ptr<std::function<void()>> preparation) {

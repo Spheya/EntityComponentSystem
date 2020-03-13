@@ -7,3 +7,7 @@ ResourceManager& ResourceManager::getInstance() {
 		instance.reset(new ResourceManager());
 	return *instance;
 }
+
+void ResourceManager::unloadAll() {
+	_resources.clear();
+}

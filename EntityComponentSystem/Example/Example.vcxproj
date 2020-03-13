@@ -174,8 +174,9 @@
     <None Include="res\doof.obj" />
     <None Include="res\dragon.obj" />
     <None Include="res\monki.obj" />
+    <None Include="res\pbrShading.glsl" />
     <None Include="res\sphere.obj" />
-    <None Include="pbrShading.glsl" />
+    <None Include="res\test.comp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\floorTexture.png" />

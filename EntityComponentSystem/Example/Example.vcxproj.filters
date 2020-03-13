@@ -41,7 +41,10 @@
     <None Include="res\pbr.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="pbrShading.glsl">
+    <None Include="res\test.comp">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\pbrShading.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

@@ -22,13 +22,12 @@ namespace renderer {
 		[[nodiscard]] bool isValid() const;
 
 		void bind() const;
-		void bindInstanced() const;
 		static void bindDefaultShader();
 
 		void dispatchPreparation() const;
 		void dispatchCleanup() const;
 
-		[[nodiscard]] GLint getUniformLocation(const std::string& uniform, bool instanced = false);
+		[[nodiscard]] GLint getUniformLocation(const std::string& uniform);
 
 		void addPreparationFunction(std::unique_ptr<std::function<void()>> preparation);
 		void removePreparationFunction();
@@ -47,7 +46,6 @@ namespace renderer {
 
 	private:
 		GLuint _program = 0;
-		GLuint _instancedProgram = 0;
 
 		std::unique_ptr<std::function<void()>> _preparationFunction;
 		std::unique_ptr<std::function<void()>> _cleanupFunction;
@@ -56,6 +54,5 @@ namespace renderer {
 		std::vector<GLenum> _enable;
 
 		std::unordered_map<std::string, GLint> _uniforms;
-		std::unordered_map<std::string, GLint> _instancedUniforms;
 	};
 }
