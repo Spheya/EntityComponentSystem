@@ -137,10 +137,6 @@ int main() {
 		if (window.getInput()->isMouseButtonDown(GLFW_MOUSE_BUTTON_2))
 			light2.position = camera.getTransform().getPosition();
 
-		//light.position = glm::vec3(sin(time) * 8, -1.7f + light.radius, -4.0f + cos(time) * 4.0f);
-		//light2.position = glm::vec3(-sin(time) * 8, -1.7f + light.radius, -4.0f - cos(time) * 4.0f);
-		//light.position = camera.getTransform().getPosition();
-
 		modelRenderSystem->updateCamera(camera);
 
 		ecsEngine.updateSystems(window.getDeltaTime());
