@@ -3,6 +3,6 @@
 
 namespace renderer {
 	namespace ShaderPreprocessor {
-		std::string process(std::string shaderFile, bool instanced);
+		std::string process(std::string shaderFile);
 	}
 }

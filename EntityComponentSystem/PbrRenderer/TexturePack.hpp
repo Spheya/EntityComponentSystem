@@ -13,7 +13,6 @@ namespace renderer {
 		GLint add(std::shared_ptr<const Texture> texture);
 
 		void bind() const;
-		void unbind() const;
 
 	private:
 		std::vector<std::shared_ptr<const Texture>> _textures;

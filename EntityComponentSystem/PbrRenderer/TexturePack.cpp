@@ -14,9 +14,3 @@ void renderer::TexturePack::bind() const {
 	for(size_t i = 0; i < _textures.size(); ++i)
 		_textures[i]->bind(GLuint(i));
 }
-
-void renderer::TexturePack::unbind() const {
-	for(size_t i = 0; i < _textures.size(); ++i) {
-		_textures[i]->unbind(GLuint(i));
-	}
-}

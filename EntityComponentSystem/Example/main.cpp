@@ -13,8 +13,11 @@
 #include <Camera.hpp>
 #include <ModelRenderSystem.hpp>
 #include <ShaderPreprocessor.hpp>
+#include <ResourceManager.hpp>
 
 int main() {
+	auto& resourceManager = ResourceManager::getInstance();
+
 	renderer::GlfwGuard glfwGuard;
 
 	// Setup window
@@ -23,10 +26,11 @@ int main() {
 	window.enableVsync(false);
 
 	// Load the shader
+	// TODO: make the shaderprogram a resource
 	std::shared_ptr<renderer::ShaderProgram> shader = std::make_shared<renderer::ShaderProgram>();
-	shader->load(std::vector<std::shared_ptr<renderer::Shader>>{
-		std::make_shared<renderer::Shader>("res/pbr.vert", GL_VERTEX_SHADER),
-			std::make_shared<renderer::Shader>("res/pbr.frag", GL_FRAGMENT_SHADER)
+		shader->load(std::vector<renderer::Shader*>{
+			resourceManager.get<renderer::Shader>("res/pbr.vert"),
+			resourceManager.get<renderer::Shader>("res/pbr.frag"),
 		},
 		std::vector<std::pair<std::string, GLuint>> {
 			{"position", 0},
@@ -44,20 +48,18 @@ int main() {
 	ecsEngine.registerSystem(modelRenderSystem);
 
 	// Load textures
-	auto floorTexture = std::make_shared<renderer::Texture>();
-	floorTexture->loadFromFile("res/floorTexture.png", GL_NEAREST);
+	// TODO: Make materials resources
+	auto floorTexture = resourceManager.get<renderer::Texture>("res/floorTexture.png");
+	floorTexture->setFilter(GL_NEAREST);
 
-	auto metalBaseColour = std::make_shared<renderer::Texture>();
-	auto metalMetalness = std::make_shared<renderer::Texture>();
-	auto metalRoughness = std::make_shared<renderer::Texture>();
-	auto metalNormal = std::make_shared<renderer::Texture>();
+	auto metalBaseColour = resourceManager.get<renderer::Texture>("res/metal_basecolour.jpg");
+	auto metalMetalness  = resourceManager.get<renderer::Texture>("res/metal_metalness.jpg");
+	auto metalRoughness  = resourceManager.get<renderer::Texture>("res/metal_roughness.jpg");
+	auto metalNormal     = resourceManager.get<renderer::Texture>("res/metal_normal.jpg");
 
-	metalBaseColour->loadFromFile("res/metal_basecolour.jpg");
-	metalMetalness->loadFromFile("res/metal_metalness.jpg");
-	metalRoughness->loadFromFile("res/metal_roughness.jpg");
-	metalNormal->loadFromFile("res/metal_normal.jpg");
-
-	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 0.0f, 1.0f));
+	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(
+		floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 0.0f, 1.0f)
+	);
 	std::shared_ptr<renderer::Material> metalMaterial = std::make_shared<renderer::Material>(
 		metalBaseColour, metalMetalness, metalRoughness, metalNormal
 	);
@@ -86,7 +88,7 @@ int main() {
 		}
 	);
 
-	auto testModel = std::make_shared<renderer::Model>("res/sphere.obj");
+	auto testModel = resourceManager.get<renderer::Model>("res/sphere.obj");
 
 	// Create entities
 	for (int x = 0; x < 20; ++x) {
@@ -95,7 +97,7 @@ int main() {
 			ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
 				Transform(glm::vec3(x * 1.5f - 5.0f * 1.5f, -1.0f + y * 1.5f, -4.0f), glm::vec3(), glm::vec3(0.75f)),
 				testModel,
-				metalMaterial
+				metalMaterial.get()
 			));
 		}
 	}
@@ -103,8 +105,8 @@ int main() {
 	auto& floorEntity = ecsEngine.createEntity();
 	ecsEngine.addComponent(floorEntity, renderer::ModelRenderComponent(
 		Transform(),
-		floorModel,
-		floorMaterial
+		floorModel.get(),
+		floorMaterial.get()
 	));
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setScale(glm::vec3(floorSize));
 	floorEntity.getComponent<renderer::ModelRenderComponent>()->transform.setPosition(glm::vec3(0.0f, -1.7f, 0.0f));

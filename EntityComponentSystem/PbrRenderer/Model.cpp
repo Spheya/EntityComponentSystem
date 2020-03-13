@@ -15,16 +15,32 @@ namespace {
 	}
 }
 
-renderer::Model::Model(const std::string filename) :
+renderer::Model::Model(const std::string file) :
+	Resource(file),
 	_vao(GL_TRIANGLES, 0)
+{}
+
+renderer::Model::Model(const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) :
+	Resource(""),
+	_vao(GL_TRIANGLES, positions.size())
 {
+	storeVboData(positions, uvCoords, normals);
+}
+
+renderer::Model::Model(const std::vector<GLuint>& indices, const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) :
+	Model(positions, uvCoords, normals)
+{
+	_vao.setIndexBuffer(indices);
+}
+
+void renderer::Model::load() {
 	objl::Loader loader;
 
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> uvCoords;
 	std::vector<glm::vec3> normals;
 
-	if (!loader.LoadFile(filename))
+	if (!loader.LoadFile(getPath()))
 		std::terminate();
 
 	for (const auto& vertex : loader.LoadedVertices) {
@@ -35,18 +51,6 @@ renderer::Model::Model(const std::string filename) :
 
 	storeVboData(positions, uvCoords, normals);
 	_vao.setIndexBuffer(loader.LoadedIndices);
-}
-
-renderer::Model::Model(const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) :
-	_vao(GL_TRIANGLES, positions.size())
-{
-	storeVboData(positions, uvCoords, normals);
-}
-
-renderer::Model::Model(const std::vector<GLuint>& indices, const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) :
-	Model(positions, uvCoords, normals)
-{
-	_vao.setIndexBuffer(indices);
 }
 
 void renderer::Model::storeVboData(const std::vector<glm::vec3>& positions, const std::vector<glm::vec2>& uvCoords, const std::vector<glm::vec3>& normals) {

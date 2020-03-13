@@ -9,14 +9,14 @@
 
 namespace renderer {
 	struct ModelRenderComponent {
-		ModelRenderComponent(const Transform& transform, std::shared_ptr<Model> model, std::shared_ptr<Material> material) :
-			transform(transform), model(std::move(model)), material(std::move(material))
+		ModelRenderComponent(const Transform& transform, Model* model, Material* material) :
+			transform(transform), model(model), material(material)
 		{}
 
 		Transform transform;
 
-		std::shared_ptr<Model> model;
-		std::shared_ptr<Material> material;
+		Model* model;
+		Material* material;
 	};
 
 }

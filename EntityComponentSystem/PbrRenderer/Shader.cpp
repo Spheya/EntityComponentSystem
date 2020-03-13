@@ -5,29 +5,37 @@
 
 #include "ShaderPreprocessor.hpp"
 
-renderer::Shader::Shader(const std::string& filename, GLenum type) :
-	_type(type)
-{
-	loadFromFile(filename);
-}
-
-renderer::Shader::Shader(Shader&& other) noexcept {
-	_id = other._id;
-	_type = other._type;
-	other._id = 0;
-}
-
-renderer::Shader&renderer::Shader::operator=(Shader&& other) noexcept {
-	_id = other._id;
-	_type = other._type;
-	other._id = 0;
-
-	return *this;
+renderer::Shader::Shader(const std::string& path) :
+	Resource(path) {
+	if (getFileExtension() == ".vert") {
+		_type = GL_VERTEX_SHADER;
+	} else if (getFileExtension() == ".frag") {
+		_type = GL_FRAGMENT_SHADER;
+	} else if (getFileExtension() == ".comp") {
+		_type = GL_COMPUTE_SHADER;
+	} else if (getFileExtension() == ".geom") {
+		_type = GL_GEOMETRY_SHADER;
+	} else if (getFileExtension() == ".tctrl") {
+		_type = GL_TESS_CONTROL_SHADER;
+	} else if (getFileExtension() == ".teval") {
+		_type = GL_TESS_EVALUATION_SHADER;
+	}
 }
 
 renderer::Shader::~Shader() {
-	if(_id != 0)
-		glDeleteShader(_id);
+	glDeleteShader(_id);
+}
+
+void renderer::Shader::load() {
+	// Load the shader code through the preprocessor
+	const std::string defaultShader = ShaderPreprocessor::process(getPath());
+
+	// Compile the code
+	_id = loadFromString(defaultShader, _type);
+}
+
+GLuint renderer::Shader::getId() const {
+	return _id;
 }
 
 GLuint renderer::Shader::loadFromString(const std::string& source, GLenum type) {
@@ -66,31 +74,4 @@ GLuint renderer::Shader::loadFromString(const std::string& source, GLenum type) 
 #endif
 
 	return id;
-}
-
-void renderer::Shader::loadFromFile(const std::string& filename) {
-	// Delete the shader if it already exists
-	if (_id != 0)
-		glDeleteShader(_id);
-
-	if (_instancedId != 0)
-		glDeleteShader(_instancedId);
-
-	// Load the shader code through the preprocessor
-	const std::string defaultShader = ShaderPreprocessor::process(filename, false);
-	const std::string instancedShader = ShaderPreprocessor::process(filename, true);
-	
-	std::cout << defaultShader << std::endl << std::endl << std::endl;
-
-	// Compile the code
-	_id = loadFromString(defaultShader, _type);
-	_instancedId = loadFromString(instancedShader, _type);
-}
-
-bool renderer::Shader::isValid() const {
-	return _id != 0;
-}
-
-GLuint renderer::Shader::getId() const {
-	return _id;
 }

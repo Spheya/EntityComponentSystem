@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathConstants.hpp" />
+    <ClInclude Include="Resource.hpp" />
+    <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="Transform.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

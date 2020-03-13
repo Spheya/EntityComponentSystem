@@ -11,14 +11,14 @@ namespace renderer {
 	{
 	public:
 		ShaderProgram() = default;
-		explicit ShaderProgram(std::vector<std::shared_ptr<Shader>> shaders, const std::vector<std::pair<std::string, GLuint>>& attributes);
+		explicit ShaderProgram(const std::vector<Shader*>& shaders, const std::vector<std::pair<std::string, GLuint>>& attributes);
 		ShaderProgram(const ShaderProgram&) = delete;
 		ShaderProgram& operator=(const ShaderProgram&) = delete;
 		ShaderProgram(ShaderProgram&& other) noexcept;
 		ShaderProgram& operator=(ShaderProgram&& other) noexcept;
 		~ShaderProgram();
 
-		void load(std::vector<std::shared_ptr<Shader>> shaders, const std::vector<std::pair<std::string, GLuint>>& attributes);
+		void load(const std::vector<Shader*>& shaders, const std::vector<std::pair<std::string, GLuint>>& attributes);
 		[[nodiscard]] bool isValid() const;
 
 		void bind() const;

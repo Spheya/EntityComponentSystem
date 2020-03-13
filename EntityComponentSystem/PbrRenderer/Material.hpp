@@ -9,14 +9,22 @@
 namespace renderer {
 	class MaterialTexture {
 	public:
-		MaterialTexture(std::shared_ptr<Texture> texture);
+		MaterialTexture(const Texture* texture);
 		MaterialTexture(float value);
 		MaterialTexture(const glm::vec3& value);
 
-		const std::shared_ptr<Texture>& getTexture() const;
+		MaterialTexture(const MaterialTexture&) = delete;
+		MaterialTexture& operator=(const MaterialTexture&) = delete;
+		MaterialTexture(MaterialTexture&& other);
+		MaterialTexture& operator=(MaterialTexture&& other);
+
+		~MaterialTexture();
+
+		const Texture* getTexture() const;
 
 	private:
-		std::shared_ptr<Texture> _texture;
+		const Texture* _texture;
+		bool _textureOwner;
 	};
 	
 	struct Material {
@@ -26,10 +34,10 @@ namespace renderer {
 			MaterialTexture roughness,
 			MaterialTexture normal
 		) :
-			baseColour(baseColour),
-			metalness(metalness),
-			roughness(roughness),
-			normal(normal)
+			baseColour(std::move(baseColour)),
+			metalness(std::move(metalness)),
+			roughness(std::move(roughness)),
+			normal(std::move(normal))
 		{}
 
 		MaterialTexture baseColour;

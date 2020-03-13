@@ -3,8 +3,8 @@
 #include <iostream>
 #include <cassert>
 
-renderer::ShaderProgram::ShaderProgram(std::vector<std::shared_ptr<Shader>> shaders, const std::vector<std::pair<std::string, GLuint>>& attributes) {
-	load(std::move(shaders), attributes);
+renderer::ShaderProgram::ShaderProgram(const std::vector<Shader*>& shaders, const std::vector<std::pair<std::string, GLuint>>& attributes) {
+	load(shaders, attributes);
 }
 
 renderer::ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept {
@@ -24,7 +24,7 @@ renderer::ShaderProgram::~ShaderProgram() {
 		glDeleteProgram(_program);
 }
 
-void renderer::ShaderProgram::load(std::vector<std::shared_ptr<Shader>> shaders, const std::vector<std::pair<std::string, GLuint>>& attributes) {
+void renderer::ShaderProgram::load(const std::vector<Shader*>& shaders, const std::vector<std::pair<std::string, GLuint>>& attributes) {
 	if(_program != 0)
 		glDeleteProgram(_program);
 

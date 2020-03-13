@@ -41,8 +41,10 @@ namespace {
 	}
 }
 
-std::string renderer::ShaderPreprocessor::process(std::string shaderFile, bool instanced) {
+std::string renderer::ShaderPreprocessor::process(std::string shaderFile) {
 	std::unordered_map<std::string, bool> includedFiles;
+
+	bool instanced = false;
 
 	std::istringstream shaderCode(processFile(shaderFile, std::filesystem::current_path().u8string() + shaderFile, instanced, includedFiles));
 	std::ostringstream processedCode;
