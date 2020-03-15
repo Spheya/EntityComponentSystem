@@ -78,6 +78,9 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Fbo.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlfwGuard.hpp">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="PointLightSource.hpp">
       <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbo.hpp">
+      <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

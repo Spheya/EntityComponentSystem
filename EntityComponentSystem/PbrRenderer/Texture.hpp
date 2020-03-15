@@ -7,6 +7,8 @@
 
 namespace renderer {
 	class Texture : public Resource{
+		friend class Fbo;
+
 	public:
 		explicit Texture(const std::string& path = "") : Resource(path) {}
 		~Texture();

@@ -41,16 +41,19 @@ int main() {
 	shader->addEnable(GL_DEPTH_TEST);
 	shader->addEnable(GL_CULL_FACE);
 
-	std::shared_ptr<renderer::ShaderProgram> comp = std::make_shared<renderer::ShaderProgram>();
-	comp->load(
-		std::vector<renderer::Shader*>{resourceManager.get<renderer::Shader>("res/test.comp")},
-		std::vector<std::pair<std::string, GLuint>> {}
+	std::shared_ptr<renderer::ShaderProgram> fboShader = std::make_shared<renderer::ShaderProgram>();
+	fboShader->load(
+		std::vector<renderer::Shader*>{
+			resourceManager.get<renderer::Shader>("res/fboRenderer.vert"),
+			resourceManager.get<renderer::Shader>("res/fboRenderer.frag"),
+		},
+		std::vector<std::pair<std::string, GLuint>> {{ "position", 0 }}
 	);
 
 	// Setup ecs
 	ecs::Engine ecsEngine;
 
-	const auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window, shader);
+	const auto modelRenderSystem = std::make_shared<renderer::ModelRenderSystem>(&window, shader, fboShader);
 	ecsEngine.registerSystem(modelRenderSystem);
 
 	// Load textures
@@ -134,12 +137,6 @@ int main() {
 	float time = 0.0f;
 	while (!window.isCloseRequested()) {
 		time += window.getDeltaTime();
-
-		comp->bind();
-		floorTexture->bind(0);
-		glUniform1f(comp->getUniformLocation("time"), time);
-		glUniform1i(comp->getUniformLocation("destTex"), 0);
-		glDispatchCompute(2, 2, 1);
 
 		camera.processDebugMovement(*window.getInput(), window.getDeltaTime());
 		

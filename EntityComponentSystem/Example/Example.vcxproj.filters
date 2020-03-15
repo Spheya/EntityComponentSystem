@@ -47,6 +47,12 @@
     <None Include="res\pbrShading.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="res\fboRenderer.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\fboRenderer.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\floorTexture.png">

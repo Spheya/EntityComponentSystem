@@ -47,34 +47,33 @@ float geometrySmith(vec3 normal, vec3 toCameraDirection, vec3 toLightDirection, 
     return geometrySchlickGGX(normal, toCameraDirection, roughness) * geometrySchlickGGX(normal, toLightDirection, roughness);
 }
 
-vec3 GGX(Material material, vec3 toCameraDirection, vec3 toLightDirection, vec3 position, vec3 normal) {
-  vec3 baseReflectivity = mix(vec3(0.04), material.baseColour, material.metalness);
-
+vec3 GGX(Material material, vec3 toCameraDirection, vec3 toLightDirection, vec3 position, vec3 normal, vec3 baseReflectivity, vec3 reflectionEnergy) {
   vec3 halfwayVector = normalize(toCameraDirection + toLightDirection);
 
   float normalDistribution = normalDistributionGGX(normal, halfwayVector, material.roughness);
   float geometry = geometrySmith(normal, toCameraDirection, toLightDirection, material.roughness);
-  vec3 fresnel = fresnelSchlick(max(dot(normal, toCameraDirection), 0.0), baseReflectivity);
 
-  vec3 specular = normalDistribution * geometry * fresnel / (4.0 * max(dot(normal, toCameraDirection), 0.001) * max(dot(normal, toLightDirection), 0.001));
+  float specular = normalDistribution * geometry / (4.0 * max(dot(normal, toCameraDirection), 0.001) * max(dot(normal, toLightDirection), 0.001));
 
-  vec3 refractionEnergy = vec3(1.0) - fresnel * material.metalness;
+  vec3 refractionEnergy = vec3(1.0) - reflectionEnergy;
 
-  return (refractionEnergy * material.baseColour / PI + specular) * max(dot(normal, toLightDirection), 0.0);
+  return (refractionEnergy * (material.baseColour / PI)
+        + reflectionEnergy * specular)
+        * max(dot(normal, toLightDirection), 0.0);
 }
 
-vec3 calcLight(DirectionalLight light, Material material, vec3 position, vec3 normal, vec3 toCamera) {
+vec3 calcLight(DirectionalLight light, Material material, vec3 position, vec3 normal, vec3 toCamera, vec3 baseReflectivity, vec3 reflectionEnergy) {
   vec3 toCameraDirection = normalize(toCamera);
   vec3 toLightDirection = normalize(-light.direction);
 
-  return light.intensity * light.colour * GGX(material, toCameraDirection, toLightDirection, position, normal);
+  return light.intensity * light.colour * GGX(material, toCameraDirection, toLightDirection, position, normal, baseReflectivity, reflectionEnergy);
 }
 
-vec3 calcLight(PointLight light, Material material, vec3 position, vec3 normal, vec3 toCamera) {
+vec3 calcLight(PointLight light, Material material, vec3 position, vec3 normal, vec3 toCamera, vec3 baseReflectivity, vec3 reflectionEnergy) {
   vec3 toLight = light.position - position;
   vec3 toCameraDirection = normalize(toCamera);
   vec3 toLightDirection = normalize(toLight);
   float falloff = 1.0 / (4.0 * PI * dot(toLight, toLight));
 
-  return light.intensity * light.colour * falloff * GGX(material, toCameraDirection, toLightDirection, position, normal);
+  return light.intensity * light.colour * falloff * GGX(material, toCameraDirection, toLightDirection, position, normal, baseReflectivity, reflectionEnergy);
 }

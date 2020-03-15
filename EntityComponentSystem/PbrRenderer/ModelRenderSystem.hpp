@@ -6,18 +6,12 @@
 #include "Camera.hpp"
 #include "DirectionalLightSource.hpp"
 #include "PointLightSource.hpp"
+#include "Fbo.hpp"
 
 namespace renderer {
 	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {
 	public:
-		ModelRenderSystem(Window* window, std::shared_ptr<ShaderProgram> pbrShader) :
-			Base(ecs::SystemThreadingMode::MAIN_THREAD), _shader(pbrShader), _window(window)
-		{
-			_globalInstanceData.store("baseColour", 0);
-			_globalInstanceData.store("metalness", 1);
-			_globalInstanceData.store("roughness", 2);
-			_globalInstanceData.store("normal", 3);
-		}
+		ModelRenderSystem(Window* window, std::shared_ptr<ShaderProgram> pbrShader, std::shared_ptr<ShaderProgram> fboShader);
 
 		void onUpdate(float, const ecs::EntityGroup<EntityData>&, ecs::ChangeBuffer&);
 
@@ -30,6 +24,15 @@ namespace renderer {
 		void removeLightSource(PointLightSource* light);
 
 	private:
+		Fbo _frameBufferObject;
+
+		size_t _texture;
+		size_t _normalMap;
+		size_t _reflectivityMap;
+
+		Vao _fboModel;
+		std::shared_ptr<ShaderProgram> _fboShader;
+
 		std::shared_ptr<ShaderProgram> _shader;
 		InstanceData _globalInstanceData;
 		Window* _window;
@@ -37,6 +40,10 @@ namespace renderer {
 		std::vector<DirectionalLightSource*> _directionalLights;
 		std::vector<PointLightSource*> _pointLights;
 		
+		void renderModels(const ecs::EntityGroup<EntityData>& entityGroup);
+		void raytraceReflections();
+		void renderFbo();
+
 		void updateLightSourceInfo();
 	};
 }

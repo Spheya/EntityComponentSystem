@@ -169,6 +169,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\fboRenderer.frag" />
+    <None Include="res\fboRenderer.vert" />
     <None Include="res\pbr.frag" />
     <None Include="res\pbr.vert" />
     <None Include="res\doof.obj" />
