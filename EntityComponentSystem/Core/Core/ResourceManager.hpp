@@ -12,14 +12,14 @@ class ResourceManager {
 public:
 	static ResourceManager& getInstance();
 
-	template<typename T>
+	template<typename T, typename = typename std::enable_if<std::is_base_of<Resource, T>::value, T>::type>
 	void load(std::string file);
 
-	template<typename T>
+	template<typename T, typename = typename std::enable_if<std::is_base_of<Resource, T>::value, T>::type>
 	void unload(std::string file);
 
 	// TODO: make this return a const ptr when all functionality is added
-	template<typename T>
+	template<typename T, typename = typename std::enable_if<std::is_base_of<Resource, T>::value, T>::type>
 	T* get(std::string name);
 
 	void unloadAll();
@@ -32,7 +32,7 @@ private:
 	std::unordered_map<std::type_index, std::unordered_map<std::string, std::unique_ptr<Resource>>> _resources;
 };
 
-template<typename T>
+template<typename T, typename>
 inline void ResourceManager::load(std::string file) {
 	// Convert file path to absolute path
 	file = std::filesystem::absolute(std::filesystem::path(file)).u8string();
@@ -47,7 +47,7 @@ inline void ResourceManager::load(std::string file) {
 	_resources[id][file] = std::move(resource);
 }
 
-template<typename T>
+template<typename T, typename>
 inline void ResourceManager::unload(std::string file) {
 	// Convert file path to absolute path
 	file = std::filesystem::absolute(std::filesystem::path(file)).u8string();
@@ -60,7 +60,7 @@ inline void ResourceManager::unload(std::string file) {
 	_resources[id].erase(file);
 }
 
-template<typename T>
+template<typename T, typename>
 inline T* ResourceManager::get(std::string file) {
 	// Convert file path to absolute path
 	file = std::filesystem::absolute(std::filesystem::path(file)).u8string();

@@ -3,23 +3,28 @@
 
 #include <GL/glew.h>
 
-#include "Resource.hpp"
+// TODO: Allow editing the texture
 
 namespace renderer {
-	class Texture : public Resource{
+	class Texture {
 		friend class Fbo;
 
 	public:
-		explicit Texture(const std::string& path = "") : Resource(path) {}
+		Texture() = default;
+		Texture(const Texture&) = delete;
+		Texture& operator=(const Texture&) = delete;
+		Texture(Texture&& other) noexcept;
+		Texture& operator=(Texture&& other) noexcept;
 		~Texture();
 
-		void load();
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height, GLenum filter);
-		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth, GLenum filter);
+		void loadFromFile(const std::string& fileName);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height);
+		void loadFromMemory(const unsigned char* data, int channels, int width, int height, int depth);
 
 		void setFilter(GLenum filter);
 
 		void bind(unsigned slot) const;
+		void unbind(unsigned slot) const;
 
 		[[nodiscard]] unsigned getWidth() const;
 		[[nodiscard]] unsigned getHeight() const;

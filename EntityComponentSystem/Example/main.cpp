@@ -11,7 +11,9 @@
 #include <Core/Vbo.hpp>
 #include <Core/ShaderPreprocessor.hpp>
 #include <Core/ResourceManager.hpp>
+#include <Core/TextureResource.hpp>
 
+#include <ModelResource.hpp>
 #include <Camera.hpp>
 #include <ModelRenderSystem.hpp>
 
@@ -58,19 +60,19 @@ int main() {
 
 	// Load textures
 	// TODO: Make materials resources
-	auto floorTexture = resourceManager.get<renderer::Texture>("res/floorTexture.png");
-	floorTexture->setFilter(GL_NEAREST);
+	auto floorTexture = resourceManager.get<renderer::TextureResource>("res/floorTexture.png");
+	floorTexture->getTexture()->setFilter(GL_NEAREST);
 
-	auto metalBaseColour = resourceManager.get<renderer::Texture>("res/metal_basecolour.jpg");
-	auto metalMetalness  = resourceManager.get<renderer::Texture>("res/metal_metalness.jpg");
-	auto metalRoughness  = resourceManager.get<renderer::Texture>("res/metal_roughness.jpg");
-	auto metalNormal     = resourceManager.get<renderer::Texture>("res/metal_normal.jpg");
+	auto metalBaseColour = resourceManager.get<renderer::TextureResource>("res/metal_basecolour.jpg");
+	auto metalMetalness  = resourceManager.get<renderer::TextureResource>("res/metal_metalness.jpg");
+	auto metalRoughness  = resourceManager.get<renderer::TextureResource>("res/metal_roughness.jpg");
+	auto metalNormal     = resourceManager.get<renderer::TextureResource>("res/metal_normal.jpg");
 
 	std::shared_ptr<renderer::Material> floorMaterial = std::make_shared<renderer::Material>(
-		floorTexture, 0.0f, 0.15f, glm::vec3(0.0f, 0.0f, 1.0f)
+		floorTexture->getTexture(), 0.0f, 0.15f, glm::vec3(0.0f, 0.0f, 1.0f)
 	);
 	std::shared_ptr<renderer::Material> metalMaterial = std::make_shared<renderer::Material>(
-		metalBaseColour, metalMetalness, metalRoughness, metalNormal
+		metalBaseColour->getTexture(), metalMetalness->getTexture(), metalRoughness->getTexture(), metalNormal->getTexture()
 	);
 
 	// Load models
@@ -97,7 +99,7 @@ int main() {
 		}
 	);
 
-	auto testModel = resourceManager.get<renderer::Model>("res/sphere.obj");
+	auto testModel = resourceManager.get<renderer::ModelResource>("res/sphere.obj");
 
 	// Create entities
 	for (int x = 0; x < 20; ++x) {
@@ -105,7 +107,7 @@ int main() {
 			auto& entity = ecsEngine.createEntity();
 			ecsEngine.addComponent(entity, renderer::ModelRenderComponent(
 				Transform(glm::vec3(x * 1.5f - 5.0f * 1.5f, -1.0f + y * 1.5f, -4.0f), glm::vec3(), glm::vec3(0.75f)),
-				testModel,
+				testModel->getModel(),
 				metalMaterial.get()
 			));
 		}

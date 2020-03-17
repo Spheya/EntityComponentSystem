@@ -58,11 +58,11 @@ void renderer::Vao::setIndexBuffer(std::vector<GLuint> indices) {
 	_usesIndexBuffer = true;
 }
 
-void renderer::Vao::bind() {
+void renderer::Vao::bind() const {
 	glBindVertexArray(_vao);
 }
 
-void renderer::Vao::draw() {
+void renderer::Vao::draw() const {
 	if (!_usesIndexBuffer) {
 		glDrawArrays(_mode, 0, _vertexCount);
 	} else {

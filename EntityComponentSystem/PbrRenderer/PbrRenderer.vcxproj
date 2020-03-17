@@ -24,6 +24,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelRenderSystem.cpp" />
     <ClCompile Include="InstanceData.cpp" />
+    <ClCompile Include="ModelResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="Model.hpp" />
     <ClInclude Include="ModelRenderComponent.hpp" />
     <ClInclude Include="ModelRenderSystem.hpp" />
+    <ClInclude Include="ModelResource.hpp" />
     <ClInclude Include="PointLightSource.hpp" />
     <ClInclude Include="InstanceData.hpp" />
   </ItemGroup>

@@ -6,7 +6,8 @@
 #include "ShaderPreprocessor.hpp"
 
 renderer::Shader::Shader(const std::string& path) :
-	Resource(path) {
+	Resource(path)
+{
 	if (getFileExtension() == ".vert") {
 		_type = GL_VERTEX_SHADER;
 	} else if (getFileExtension() == ".frag") {

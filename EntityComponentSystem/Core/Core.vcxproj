@@ -28,6 +28,7 @@
     <ClCompile Include="Core\ShaderPreprocessor.cpp" />
     <ClCompile Include="Core\ShaderProgram.cpp" />
     <ClCompile Include="Core\Texture.cpp" />
+    <ClCompile Include="Core\TextureResource.cpp" />
     <ClCompile Include="Core\Transform.cpp" />
     <ClCompile Include="Core\Vao.cpp" />
     <ClCompile Include="Core\Vbo.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Core\ShaderPreprocessor.hpp" />
     <ClInclude Include="Core\ShaderProgram.hpp" />
     <ClInclude Include="Core\Texture.hpp" />
+    <ClInclude Include="Core\TextureResource.hpp" />
     <ClInclude Include="Core\Transform.hpp" />
     <ClInclude Include="Core\Vao.hpp" />
     <ClInclude Include="Core\Vbo.hpp" />

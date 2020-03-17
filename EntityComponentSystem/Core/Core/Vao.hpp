@@ -24,8 +24,8 @@ namespace renderer {
 
 		void setIndexBuffer(std::vector<GLuint> indices);
 
-		void bind();
-		void draw();
+		void bind() const;
+		void draw() const;
 
 		GLsizei getVertexCount();
 		void setVertexCount(GLsizei count);

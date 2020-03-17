@@ -36,6 +36,9 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ModelResource.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp">
@@ -60,6 +63,9 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="PointLightSource.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelResource.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

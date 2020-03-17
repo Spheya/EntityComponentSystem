@@ -72,6 +72,9 @@
     <ClCompile Include="Core\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\TextureResource.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Resource.hpp">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="Core\Window.hpp">
       <Filter>Header Files\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\TextureResource.hpp">
+      <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
