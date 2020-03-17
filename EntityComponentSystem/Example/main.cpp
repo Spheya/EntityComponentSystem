@@ -4,16 +4,17 @@
 
 #include <ECS/Engine.hpp>
 
-#include <GlfwGuard.hpp>
-#include <Window.hpp>
-#include <Vao.hpp>
-#include <ShaderProgram.hpp>
-#include <TexturePack.hpp>
-#include <Vbo.hpp>
+#include <Core/GlfwGuard.hpp>
+#include <Core/Window.hpp>
+#include <Core/Vao.hpp>
+#include <Core/ShaderProgram.hpp>
+#include <Core/Vbo.hpp>
+#include <Core/ShaderPreprocessor.hpp>
+#include <Core/ResourceManager.hpp>
+
 #include <Camera.hpp>
 #include <ModelRenderSystem.hpp>
-#include <ShaderPreprocessor.hpp>
-#include <ResourceManager.hpp>
+#include <TexturePack.hpp>
 
 int main() {
 	auto& resourceManager = ResourceManager::getInstance();

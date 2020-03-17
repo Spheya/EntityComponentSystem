@@ -19,15 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Core\Fbo.cpp" />
+    <ClCompile Include="Core\GlfwGuard.cpp" />
+    <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Core\Resource.cpp" />
+    <ClCompile Include="Core\ResourceManager.cpp" />
+    <ClCompile Include="Core\Shader.cpp" />
+    <ClCompile Include="Core\ShaderPreprocessor.cpp" />
+    <ClCompile Include="Core\ShaderProgram.cpp" />
+    <ClCompile Include="Core\Texture.cpp" />
+    <ClCompile Include="Core\Transform.cpp" />
+    <ClCompile Include="Core\Vao.cpp" />
+    <ClCompile Include="Core\Vbo.cpp" />
+    <ClCompile Include="Core\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MathConstants.hpp" />
-    <ClInclude Include="Resource.hpp" />
-    <ClInclude Include="ResourceManager.hpp" />
-    <ClInclude Include="Transform.hpp" />
+    <ClInclude Include="Core\Fbo.hpp" />
+    <ClInclude Include="Core\GlfwGuard.hpp" />
+    <ClInclude Include="Core\Input.hpp" />
+    <ClInclude Include="Core\MathConstants.hpp" />
+    <ClInclude Include="Core\Resource.hpp" />
+    <ClInclude Include="Core\ResourceManager.hpp" />
+    <ClInclude Include="Core\Shader.hpp" />
+    <ClInclude Include="Core\ShaderPreprocessor.hpp" />
+    <ClInclude Include="Core\ShaderProgram.hpp" />
+    <ClInclude Include="Core\Texture.hpp" />
+    <ClInclude Include="Core\Transform.hpp" />
+    <ClInclude Include="Core\Vao.hpp" />
+    <ClInclude Include="Core\Vbo.hpp" />
+    <ClInclude Include="Core\Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -103,11 +123,11 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)deps/glm/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -117,6 +137,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -124,11 +148,11 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)deps/glm/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -138,6 +162,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,11 +175,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)deps/glm/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -163,6 +191,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -172,11 +204,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)deps/glm/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)deps\glew\$(Platform)\include;$(SolutionDir)deps\glfw\$(Platform)\include;$(SolutionDir)deps\glm\include;$(SolutionDir)deps\rapidxml\include;$(SolutionDir)deps\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -188,6 +220,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

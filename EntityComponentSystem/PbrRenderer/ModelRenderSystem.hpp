@@ -6,7 +6,7 @@
 #include "Camera.hpp"
 #include "DirectionalLightSource.hpp"
 #include "PointLightSource.hpp"
-#include "Fbo.hpp"
+#include <Core/Fbo.hpp>
 
 namespace renderer {
 	class ModelRenderSystem : public ecs::System<ModelRenderComponent> {

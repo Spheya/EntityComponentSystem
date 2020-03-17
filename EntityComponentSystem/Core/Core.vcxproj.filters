@@ -13,36 +13,108 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\maths">
+    <Filter Include="Header Files\OpenGL">
+      <UniqueIdentifier>{9ba69f8e-169d-4c44-a55b-05fe065d07d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Maths">
       <UniqueIdentifier>{b904c1e8-d402-4565-9fb3-e54c386316d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\maths">
+    <Filter Include="Source Files\Maths">
       <UniqueIdentifier>{71d72742-33ad-4530-b121-4ddfde7645f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGL">
+      <UniqueIdentifier>{f3ecdb2a-f783-4c28-b1f2-cf19b1a4a5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GLFW">
+      <UniqueIdentifier>{ff94f6c6-076f-479e-8871-9e120c51087b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GLFW">
+      <UniqueIdentifier>{5d66ced0-64d5-48ed-9d12-a6ed986b0910}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Transform.hpp">
-      <Filter>Header Files\maths</Filter>
-    </ClInclude>
-    <ClInclude Include="MathConstants.hpp">
-      <Filter>Header Files\maths</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="Core\Fbo.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GlfwGuard.cpp">
+      <Filter>Source Files\GLFW</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>Source Files\GLFW</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Shader.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ShaderPreprocessor.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ShaderProgram.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Texture.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Transform.cpp">
+      <Filter>Source Files\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Vao.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Vbo.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Window.cpp">
+      <Filter>Source Files\GLFW</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\maths</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="Core\Resource.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ResourceManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Fbo.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GlfwGuard.hpp">
+      <Filter>Header Files\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.hpp">
+      <Filter>Header Files\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MathConstants.hpp">
+      <Filter>Header Files\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Shader.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ShaderPreprocessor.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ShaderProgram.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Texture.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Transform.hpp">
+      <Filter>Header Files\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Vao.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Vbo.hpp">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Window.hpp">
+      <Filter>Header Files\Maths</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

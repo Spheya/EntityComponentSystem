@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Texture.hpp"
+#include <Core/Texture.hpp>
 
 namespace renderer {
 	class MaterialTexture {

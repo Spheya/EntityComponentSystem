@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include <Resource.hpp>
+#include "Resource.hpp"
 
 namespace renderer {
 	class Texture : public Resource{

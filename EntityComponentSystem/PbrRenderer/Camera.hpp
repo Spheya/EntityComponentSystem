@@ -1,6 +1,6 @@
 #pragma once
-#include "Transform.hpp"
-#include "Window.hpp"
+#include <Core/Transform.hpp>
+#include <Core/Window.hpp>
 
 namespace renderer {
 	class Camera

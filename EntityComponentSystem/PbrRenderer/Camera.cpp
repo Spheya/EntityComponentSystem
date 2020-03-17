@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-#include <MathConstants.hpp>
+#include <Core/MathConstants.hpp>
 #include <algorithm>
 
 renderer::Camera::Camera(float near, float far, float fov, Transform transform) :

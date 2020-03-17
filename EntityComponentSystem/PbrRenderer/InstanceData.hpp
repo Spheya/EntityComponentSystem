@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "ShaderProgram.hpp"
+#include <Core/ShaderProgram.hpp>
 
 namespace renderer {
 

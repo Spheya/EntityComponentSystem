@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Texture.hpp"
+#include <Core/Texture.hpp>
 #include <memory>
 
 namespace renderer {

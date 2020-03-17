@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <GL/glew.h>
-#include <Resource.hpp>
+#include "Resource.hpp"
 
 namespace renderer {
 	class Shader : public Resource

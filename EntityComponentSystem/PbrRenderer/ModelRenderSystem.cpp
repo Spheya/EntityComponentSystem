@@ -129,7 +129,7 @@ void renderer::ModelRenderSystem::raytraceReflections() {}
 void renderer::ModelRenderSystem::renderFbo() {
 	glDisable(GL_DEPTH_TEST);
 
-	_frameBufferObject.getTexture(_reflectivityMap)->bind(0);
+	_frameBufferObject.getTexture(_texture)->bind(0);
 
 	_fboShader->bind();
 

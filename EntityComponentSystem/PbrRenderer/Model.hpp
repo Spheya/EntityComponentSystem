@@ -5,10 +5,10 @@
 
 #include <glm/glm.hpp>
 
-#include <Transform.hpp>
-#include <Resource.hpp>
+#include <Core/Transform.hpp>
+#include <Core/Resource.hpp>
 
-#include "Vao.hpp"
+#include <Core/Vao.hpp>
 #include "InstanceData.hpp"
 
 namespace renderer {

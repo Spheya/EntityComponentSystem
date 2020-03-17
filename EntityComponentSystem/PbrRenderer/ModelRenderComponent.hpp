@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Model.hpp"
-#include "ShaderProgram.hpp"
+#include <Core/ShaderProgram.hpp>
 #include "Material.hpp"
 #include "InstanceData.hpp"
 

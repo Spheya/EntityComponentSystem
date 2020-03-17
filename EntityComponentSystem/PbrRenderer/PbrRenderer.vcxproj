@@ -20,42 +20,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Fbo.cpp" />
-    <ClCompile Include="GlfwGuard.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelRenderSystem.cpp" />
-    <ClCompile Include="ShaderPreprocessor.cpp" />
-    <ClCompile Include="Vao.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturePack.cpp" />
     <ClCompile Include="InstanceData.cpp" />
-    <ClCompile Include="Vbo.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="DirectionalLightSource.hpp" />
-    <ClInclude Include="Fbo.hpp" />
-    <ClInclude Include="GlfwGuard.hpp" />
-    <ClInclude Include="Input.hpp" />
     <ClInclude Include="Material.hpp" />
     <ClInclude Include="Model.hpp" />
     <ClInclude Include="ModelRenderComponent.hpp" />
     <ClInclude Include="ModelRenderSystem.hpp" />
-    <ClInclude Include="ShaderPreprocessor.hpp" />
     <ClInclude Include="PointLightSource.hpp" />
-    <ClInclude Include="Vao.hpp" />
-    <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="ShaderProgram.hpp" />
-    <ClInclude Include="Texture.hpp" />
     <ClInclude Include="TexturePack.hpp" />
     <ClInclude Include="InstanceData.hpp" />
-    <ClInclude Include="Vbo.hpp" />
-    <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -147,10 +127,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Core.lib;opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,10 +154,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Core.lib;opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -205,10 +185,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Core.lib;opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -236,10 +216,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Core.lib;opengl32.lib;glfw3.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)deps\glew\$(Platform)\lib;$(SolutionDir)deps\glfw\$(Platform)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
