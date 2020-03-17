@@ -14,7 +14,6 @@
 
 #include <Camera.hpp>
 #include <ModelRenderSystem.hpp>
-#include <TexturePack.hpp>
 
 int main() {
 	auto& resourceManager = ResourceManager::getInstance();

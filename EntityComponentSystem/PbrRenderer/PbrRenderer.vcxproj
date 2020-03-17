@@ -23,7 +23,6 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelRenderSystem.cpp" />
-    <ClCompile Include="TexturePack.cpp" />
     <ClCompile Include="InstanceData.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +33,6 @@
     <ClInclude Include="ModelRenderComponent.hpp" />
     <ClInclude Include="ModelRenderSystem.hpp" />
     <ClInclude Include="PointLightSource.hpp" />
-    <ClInclude Include="TexturePack.hpp" />
     <ClInclude Include="InstanceData.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
